@@ -1,9 +1,6 @@
 // src/react.tsx
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
- 
-const Index = () => {
-    return <div>Hello React!</div>;
-};
- 
-ReactDOM.render(<Index />, document.getElementById('app'));
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import App from './components/App'
+
+ReactDOM.render(<App/>, document.getElementById('root'))

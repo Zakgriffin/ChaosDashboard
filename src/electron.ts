@@ -1,5 +1,5 @@
 // src/electron.js
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow } = require('electron')
  
 function createWindow () {
   // Create the browser window.
@@ -9,10 +9,10 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true
     }
-  });
+  })
  
   // and load the index.html of the app.
-  win.loadFile('index.html');
+  win.loadFile('index.html')
 }
  
-app.on('ready', createWindow);
+app.on('ready', createWindow)
