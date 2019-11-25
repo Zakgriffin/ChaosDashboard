@@ -2,12 +2,13 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as THREE from 'three'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.d'
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.d'
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 //import App from './components/App'
 
 export default class App extends React.Component {
     private mount: HTMLDivElement
+    private robot: THREE.Object3D
 
     componentDidMount() {
         const scene = new THREE.Scene()
@@ -27,9 +28,19 @@ export default class App extends React.Component {
         scene.add(plane)
         plane.rotation.x = Math.PI / 2
 
+        let robot = this.robot
+
+        let animate = () => {
+            requestAnimationFrame(animate)
+            
+            controls.update()
+            robot.rotation.y += 0.01
+
+            renderer.render(scene, camera)
+        }
+
         const loader = new GLTFLoader()
-        let robot: THREE.Object3D
-        loader.load('./robot_model/scene.gltf', function (gltf) {
+        loader.load('../models/robot_model/scene.gltf', function (gltf) {
             robot = gltf.scene.children[0].children[0].children[0]
             console.log(robot)
 
@@ -39,6 +50,7 @@ export default class App extends React.Component {
             var bbox = new THREE.Box3().setFromObject(robot)
             
             scene.add(robot)
+            animate()
         }, undefined, function (error) {
             console.error(error)
         })
@@ -51,21 +63,11 @@ export default class App extends React.Component {
         controls.minDistance = 10
         controls.maxDistance = 400
         controls.maxPolarAngle = Math.PI / 2 - 0.1
-
-        let animate = function () {
-            requestAnimationFrame(animate)
-            
-            controls.update()
-            robot.rotation.y += 0.01
-
-            renderer.render(scene, camera)
-        }
-        animate()
     }
 
     render() {
         return (
-            <div ref={ref => (this.mount = ref)} />
+            <div ref={ref => (this.mount = ref)}/>
         )
     }
 }
