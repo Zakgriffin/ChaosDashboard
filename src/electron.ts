@@ -7,7 +7,6 @@ client.setReconnectDelay(1000) // The client will try to reconnect after 1 secon
 let connectedFunc, ready = false // COME BACK
 
 function createWindow() {
-    // Create the browser window.
     let win = new BrowserWindow({
         width: 800,
         height: 600,
@@ -16,7 +15,6 @@ function createWindow() {
             nodeIntegration: true
         }
     })
-    // and load the index.html of the app.
     win.loadFile('index.html')
 
     const clientDataListener = (key, val, valType, mesgType, id, flags) => {
@@ -75,6 +73,11 @@ function createWindow() {
     ipcMain.on('windowError', (ev, error) => {
         console.log(error)
     })
+
+    win.on('closed', () => {
+        console.log('main window closed');
+        client.removeListener(clientDataListener);
+    });
 }
 
 // This method will be called when Electron has finished

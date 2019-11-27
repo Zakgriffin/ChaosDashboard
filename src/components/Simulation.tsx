@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
+import NetworkTables from '../network/networktables'
 
 export default class Simulation extends React.Component {
     private mount: HTMLDivElement
@@ -31,7 +32,7 @@ export default class Simulation extends React.Component {
             requestAnimationFrame(animate)
             
             controls.update()
-            robot.rotation.y += 0.1
+            //robot.rotation.y += 0.1
 
             renderer.render(scene, camera)
         }
@@ -67,6 +68,10 @@ export default class Simulation extends React.Component {
         controls.maxPolarAngle = Math.PI / 2 - 0.1
 
         camera.position.z = 300
+
+        NetworkTables.addKeyListener('/SmartDashboard/test', (key, value) => {
+            robot.rotation.y = value / 10
+        }, false)
     }
 
     render() {

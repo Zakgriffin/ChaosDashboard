@@ -1,8 +1,9 @@
 // Heavy work in progress translating from FRC Dashboard original
 
 import * as React from 'react'
-import NetworkTables from '../network/NetworkTables'
+import NetworkTables from '../network/networktables'
 import {ipcRenderer as ipc} from 'electron'
+import { connect } from 'http2'
 
 interface IProps {}
 interface IState {
@@ -24,15 +25,16 @@ export default class ConnectWidget extends React.Component<IProps, IState> {
             connectText: '',
             addressDisabled: false
         }
+        
     }
     
-    componentDidMount() {
+    componentDidMount = () => {
         // Set function to be called when robot dis/connects
         NetworkTables.addRobotConnectionListener(this.onRobotConnection, false)
         this.setLogin()
     }
 
-    onRobotConnection(connected: boolean) {
+    onRobotConnection = (connected: boolean) => {
         this.setState({connectedState: (connected ? 'Robot connected!' : 'Robot disconnected.')})
         console.log(connected)
         
@@ -49,7 +51,7 @@ export default class ConnectWidget extends React.Component<IProps, IState> {
         this.setLogin()
     }
 
-    setLogin() {
+    setLogin = () => {
         // Add Enter key handler
         // Enable the input and the button
 
@@ -81,32 +83,67 @@ export default class ConnectWidget extends React.Component<IProps, IState> {
         }
     }
     
-    render() {
+    handleInputChange_address = e => {
+        this.setState({addressValue: e.target.value})
+    }
+
+    render = () => {
+        let s = this.state
         return (
             <div>
                 <div
                     id='login'
-                    style={{visibility: this.state.loginShown ? 'visible' : 'hidden'}}>
+                    style={{
+                        visibility: s.loginShown ? 'visible' : 'hidden',
+
+                        position: 'fixed',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                    }}
+                >
                     <input
                         id = 'connect-address'
                         type = 'text'
-                        value = 'localhost'
+                        value = {s.addressValue}
                         autoFocus
                         onKeyDown = {this.onKeyDown_address}
-                        disabled
+                        onChange = {this.handleInputChange_address}
+                        style = {{
+                            color: 'white',
+                            background: '#444',
+                            border: 'none',
+                            fontSize: '14px',
+                            padding: '6px 8px',
+                            cursor: 'pointer',
+                            outline: 0
+                        }}
                     />
                     <button
                         id = 'connect'
                         onClick = {this.onClick_connect}
-                        disabled = {this.state.addressDisabled}
-                        value = 'Connecting'
-                    />
+                        disabled = {s.addressDisabled}
+                        style = {{
+                            color: 'white',
+                            background: '#444',
+                            border: 'none',
+                            fontSize: '14px',
+                            padding: '6px 8px',
+                            cursor: 'pointer',
+                            outline: 0,
+                            height: '40px',
+                            width: '100px'
+                        }}
+                    >{s.connectText}</button>
                 </div>
                 <div>
-                    <div
-                        id = 'robot-state'>
-                        value = {this.state.connectedState}
-                    </div>
+                    <div id = 'robot-state'> {s.connectedState} </div>
                     <button
                         id = 'connect-button'
                         onClick = {this.onClick_buttonConnect}
