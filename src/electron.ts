@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain as ipc} from 'electron'
+import {app, BrowserWindow, ipcMain} from 'electron'
 import * as wpilib_NT from 'wpilib-nt-client'
 
 const client = new wpilib_NT.Client()
@@ -40,7 +40,7 @@ function createWindow() {
         connectedFunc = connectFunc
     })
     
-    ipc.on('ready', (ev, mesg) => {
+    ipcMain.on('ready', (ev, mesg) => {
         console.log('NetworkTables is ready')
         ready = win != null
 
@@ -54,7 +54,7 @@ function createWindow() {
         if(connectedFunc) connectedFunc()
     })
     // When the user chooses the address of the bot than try to connect
-    ipc.on('connect', (ev, address, port) => {
+    ipcMain.on('connect', (ev, address, port) => {
         console.log(`Trying to connect to ${address}` + (port ? ':' + port : ''))
         let callback = (connected, err) => {
             console.log('Sending status')
@@ -66,13 +66,13 @@ function createWindow() {
             client.start(callback, address)
         }
     })
-    ipc.on('add', (ev, mesg) => {
+    ipcMain.on('add', (ev, mesg) => {
         client.Assign(mesg.val, mesg.key, (mesg.flags & 1) === 1)
     })
-    ipc.on('update', (ev, mesg) => {
+    ipcMain.on('update', (ev, mesg) => {
         client.Update(mesg.id, mesg.val)
     })
-    ipc.on('windowError', (ev, error) => {
+    ipcMain.on('windowError', (ev, error) => {
         console.log(error)
     })
 }
@@ -80,7 +80,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', () => {
-    console.log('app is ready')
+    console.log('App is ready')
     createWindow()
 })
 

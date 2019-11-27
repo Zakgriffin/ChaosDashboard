@@ -1,37 +1,43 @@
-import {ipcRenderer as ipc} from 'electron'
+import {ipcRenderer} from 'electron'
 
-let keys = {}, connectionListeners = [], connected = false, globalListeners = [], keyListeners = {}, robotAddress = '127.0.0.1'
-ipc.send('ready')
-ipc.on('connected', (ev, con) => {
+let keys = {},
+    connectionListeners = [],
+    connected = false,
+    globalListeners = [],
+    keyListeners = {},
+    robotAddress = '127.0.0.1'
+
+ipcRenderer.send('ready')
+ipcRenderer.on('connected', (ev, con) => {
     connected = con
     connectionListeners.map(e => e(con))
 })
-ipc.on('add', (ev, mesg) => {
+ipcRenderer.on('add', (ev, mesg) => {
     keys[mesg.key] = { val: mesg.val, valType: mesg.valType, id: mesg.id, flags: mesg.flags, new: true }
     globalListeners.map(e => e(mesg.key, mesg.val, true))
-    if (globalListeners.length > 0)
+    if(globalListeners.length > 0)
         keys[mesg.key].new = false
-    if (mesg.key in keyListeners) {
+    if(mesg.key in keyListeners) {
         keyListeners[mesg.key].map(e => e(mesg.key, mesg.val, true))
         keys[mesg.key].new = false
     }
 })
-ipc.on('delete', (ev, mesg) => {
+ipcRenderer.on('delete', (ev, mesg) => {
     delete keys[mesg.key]
 })
-ipc.on('update', (ev, mesg) => {
+ipcRenderer.on('update', (ev, mesg) => {
     let temp = keys[mesg.key]
     temp.flags = mesg.flags
     temp.val = mesg.val
     globalListeners.map(e => e(mesg.key, temp.val, temp.new))
-    if (globalListeners.length > 0)
+    if(globalListeners.length > 0)
         keys[mesg.key].new = false
-    if (mesg.key in keyListeners) {
+    if(mesg.key in keyListeners) {
         keyListeners[mesg.key].map(e => e(mesg.key, temp.val, temp.new))
         temp.new = false
     }
 })
-ipc.on('flagChange', (ev, mesg) => {
+ipcRenderer.on('flagChange', (ev, mesg) => {
     keys[mesg.key].flags = mesg.flags
 })
 var d3_map = function () {
@@ -76,7 +82,7 @@ const NetworkTables = {
         if(typeof f != 'function') return new Error('Invalid argument')
 
         connectionListeners.push(f)
-        if (immediateNotify)
+        if(immediateNotify)
             f(connected)
     },
     /**
@@ -88,7 +94,7 @@ const NetworkTables = {
         if(typeof f != 'function') return new Error('Invalid argument')
 
         globalListeners.push(f)
-        if (immediateNotify) {
+        if(immediateNotify) {
             for (let key in keys) {
                 f(key, keys[key].val, keys[key].new)
                 keys[key].new = false
@@ -104,13 +110,13 @@ const NetworkTables = {
     addKeyListener(key, f, immediateNotify) {
         if(typeof key != 'string' || typeof f != 'function') return new Error('Valid Arguments are (string, function)')
 
-        if (typeof keyListeners[key] != 'undefined') {
+        if(typeof keyListeners[key] != 'undefined') {
             keyListeners[key].push(f)
         }
         else {
             keyListeners[key] = [f]
         }
-        if (immediateNotify && key in keys) {
+        if(immediateNotify && key in keys) {
             let temp = keys[key]
             f(key, temp.val, temp.new)
         }
@@ -141,7 +147,7 @@ const NetworkTables = {
     getValue(key, defaultValue) {
         if(typeof key != 'string') return new Error('Invalid Argument')
 
-        if (typeof keys[key] != 'undefined') {
+        if(typeof keys[key] != 'undefined') {
             return keys[key].val
         }
         else {
@@ -169,12 +175,12 @@ const NetworkTables = {
     putValue(key, value) {
         if(typeof key != 'string') return new Error('Invalid Argument')
 
-        if (typeof keys[key] != 'undefined') {
+        if(typeof keys[key] != 'undefined') {
             keys[key].val = value
-            ipc.send('update', { key, val: value, id: keys[key].id, flags: keys[key].flags })
+            ipcRenderer.send('update', { key, val: value, id: keys[key].id, flags: keys[key].flags })
         }
         else {
-            ipc.send('add', { key, val: value, flags: 0 })
+            ipcRenderer.send('add', { key, val: value, flags: 0 })
         }
         return connected
     },
