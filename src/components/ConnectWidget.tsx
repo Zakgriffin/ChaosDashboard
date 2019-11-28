@@ -3,7 +3,6 @@
 import * as React from 'react'
 import NetworkTables from '../network/networktables'
 import {ipcRenderer as ipc} from 'electron'
-import { connect } from 'http2'
 
 interface IProps {}
 interface IState {
@@ -71,7 +70,7 @@ export default class ConnectWidget extends React.Component<IProps, IState> {
             addressDisabled: true,
             connectText: 'Connecting...'
         })
-        ipc.send('connect', this.state.addressValue)
+        NetworkTables.tryToConnect(this.state.addressValue)
     }
 
     // On click try to connect and disable the input and the button

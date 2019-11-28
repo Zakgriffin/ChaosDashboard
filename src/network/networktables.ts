@@ -1,45 +1,27 @@
-import {ipcRenderer} from 'electron'
+import * as wpilib_NT from 'wpilib-nt-client'
+
+const client = new wpilib_NT.Client()
+client.setReconnectDelay(1000)
 
 let keys = {},
     connectionListeners = [],
-    connected = false,
     globalListeners = [],
     keyListeners = {},
-    robotAddress = '127.0.0.1'
+    robotAddress = 'COME BACK'
 
-ipcRenderer.send('ready')
-ipcRenderer.on('connected', (ev, con) => {
-    connected = con
-    connectionListeners.map(e => e(con))
-})
-ipcRenderer.on('add', (ev, mesg) => {
-    keys[mesg.key] = { val: mesg.val, valType: mesg.valType, id: mesg.id, flags: mesg.flags, new: true }
-    globalListeners.map(e => e(mesg.key, mesg.val, true))
-    if(globalListeners.length > 0)
-        keys[mesg.key].new = false
-    if(mesg.key in keyListeners) {
-        keyListeners[mesg.key].map(e => e(mesg.key, mesg.val, true))
-        keys[mesg.key].new = false
+let clientListener = client.addListener((key, value, valType, mesgType, id, flags) => {
+    console.log(keyListeners)
+    console.log(key)
+    globalListeners.map(listenerCallback => listenerCallback(value))
+    if(keyListeners[key]) {
+        keyListeners[key].map(listenerCallback => listenerCallback(value))
     }
 })
-ipcRenderer.on('delete', (ev, mesg) => {
-    delete keys[mesg.key]
-})
-ipcRenderer.on('update', (ev, mesg) => {
-    let temp = keys[mesg.key]
-    temp.flags = mesg.flags
-    temp.val = mesg.val
-    globalListeners.map(e => e(mesg.key, temp.val, temp.new))
-    if(globalListeners.length > 0)
-        keys[mesg.key].new = false
-    if(mesg.key in keyListeners) {
-        keyListeners[mesg.key].map(e => e(mesg.key, temp.val, temp.new))
-        temp.new = false
-    }
-})
-ipcRenderer.on('flagChange', (ev, mesg) => {
-    keys[mesg.key].flags = mesg.flags
-})
+
+function connectionUpdate(con) {
+    connectionListeners.map(listenerCallback => listenerCallback(con))
+}
+
 var d3_map = function () {
     this._ = Object.create(null)
     this.forEach = function (f) {
@@ -83,7 +65,7 @@ const NetworkTables = {
 
         connectionListeners.push(f)
         if(immediateNotify)
-            f(connected)
+            f(client.isConnected())
     },
     /**
      * Set a function that will be called whenever any NetworkTables value is changed
@@ -127,8 +109,7 @@ const NetworkTables = {
      * @returns true if a key is present in NetworkTables, false otherwise
      */
     containsKey(key) {
-        //if(typeof f != 'string') return false
-        // COME BACK
+        if(typeof key != 'string') return false
         return key in keys
     },
     /**
@@ -158,31 +139,35 @@ const NetworkTables = {
      * @returns null if the robot is not connected, or a string otherwise
      */
     getRobotAddress() {
-        return connected ? robotAddress : null
+        return client.isConnected() ? robotAddress : null
     },
     /**
      * @returns true if the robot is connected
      */
     isRobotConnected() {
-        return connected
+        return client.isConnected()
     },
     /**
      * Sets the value in NetworkTables. If the websocket is not connected, the value will be discarded.
      * @param {string} key A networktables key
      * @param value The value to set (see warnings)
-     * @returns True if the websocket is open, False otherwise
      */
     putValue(key, value) {
         if(typeof key != 'string') return new Error('Invalid Argument')
+        if(!client.isConnected()) return
 
         if(typeof keys[key] != 'undefined') {
-            keys[key].val = value
-            ipcRenderer.send('update', { key, val: value, id: keys[key].id, flags: keys[key].flags })
+            client.Update(keys[key].id, value)
         }
         else {
-            ipcRenderer.send('add', { key, val: value, flags: 0 })
+            client.Assign(value, key) //(mesg.fzlags & 1) === 1
         }
-        return connected
+        /*
+        globalListeners.map(listenerCallback => listenerCallback(value))
+        if(keyListeners[key]) {
+            keyListeners[key].map(listenerCallback => listenerCallback(value))
+        }
+        */
     },
     /**
      * Creates a new empty map (or hashtable) object and returns it. The map is safe to store NetworkTables keys in.
@@ -204,6 +189,24 @@ const NetworkTables = {
      */
     keySelector(key) {
         return encodeURIComponent(key).replace(/([&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1')
+    },
+
+    // When the user chooses the address of the bot than try to connect
+    tryToConnect(address, port?) {
+        console.log(`Trying to connect to ${address}` + (port ? ':' + port : ''))
+        let callback = (con, err) => {
+            console.log('Sending status')
+            connectionUpdate(con)
+            if(err) console.log(err)
+        }
+        if(port) {
+            client.start(callback, address, port)
+        } else {
+            client.start(callback, address)
+        }
+    },
+    disconnect() {
+        client.removeListener(clientListener)
     }
 }
 

@@ -35,6 +35,7 @@ export default class Simulation extends React.Component {
             //robot.rotation.y += 0.1
 
             renderer.render(scene, camera)
+            NetworkTables.putValue('/SmartDashboard/thing', camera.position.x)
         }
         /*
         var geometry = new THREE.BoxBufferGeometry( 30, 30, 30 );
@@ -69,7 +70,7 @@ export default class Simulation extends React.Component {
 
         camera.position.z = 300
 
-        NetworkTables.addKeyListener('/SmartDashboard/test', (key, value) => {
+        NetworkTables.addKeyListener('/SmartDashboard/test', (value) => {
             robot.rotation.y = value / 10
         }, false)
     }
