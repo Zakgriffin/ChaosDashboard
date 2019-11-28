@@ -72,7 +72,7 @@ export default class Simulation extends React.Component {
 
         NetworkTables.addKeyListener('/SmartDashboard/test', (value) => {
             robot.rotation.y = value / 10
-        }, false)
+        })
     }
 
     render() {

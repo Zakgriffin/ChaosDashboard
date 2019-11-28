@@ -7,153 +7,98 @@ let keys = {},
     connectionListeners = [],
     globalListeners = [],
     keyListeners = {},
-    robotAddress = 'COME BACK'
+    robotAddress = undefined
 
-let clientListener = client.addListener((key, value, valType, mesgType, id, flags) => {
-    console.log(keyListeners)
-    console.log(key)
+const clientListener = client.addListener((key, value/*, valType, mesgType, id, flags*/) => {
     globalListeners.map(listenerCallback => listenerCallback(value))
     if(keyListeners[key]) {
         keyListeners[key].map(listenerCallback => listenerCallback(value))
     }
 })
 
-function connectionUpdate(con) {
-    connectionListeners.map(listenerCallback => listenerCallback(con))
-}
-
-var d3_map = function () {
-    this._ = Object.create(null)
-    this.forEach = function (f) {
-        for (var key in this._)
-            f.call(this, d3_map_unescape(key), this._[key])
-    }
-    this.get = function (key) {
-        return this._[d3_map_escape(key)]
-    }
-    this.getKeys = function () {
-        var keys = []
-        for (var key in this._)
-            keys.push(d3_map_unescape(key))
-        return keys
-    }
-    this.has = function (key) {
-        return d3_map_escape(key) in this._
-    }
-    this.set = function (key, value) {
-        return this._[d3_map_escape(key)] = value
-    }
-}
-var d3_map_proto = '__proto__', d3_map_zero = '\x00'
-function d3_map_escape(key) {
-    return (key += '') === d3_map_proto || key[0] === d3_map_zero ? d3_map_zero + encodeURIComponent(key) : encodeURIComponent(key)
-}
-function d3_map_unescape(key) {
-    return (key += '')[0] === d3_map_zero ? decodeURIComponent(key.slice(1)) : decodeURIComponent(key)
-}
 
 const NetworkTables = {
     /**
      * Sets a function to be called when the robot connects/disconnects to the pynetworktables2js server via NetworkTables. It will also be called when the websocket connects/disconnects.
      *
      * When a listener function is called with a ‘true’ parameter, the NetworkTables.getRobotAddress() function will return a non-null value.
-     * @param {(connected: boolean) => any} f a function that will be called with a single boolean parameter that indicates whether the robot is connected
-     * @param {boolean} [immediateNotify] If true, the function will be immediately called with the current robot connection state
+     * @param callback a function that will be called with a single boolean parameter that indicates whether the robot is connected
      */
-    addRobotConnectionListener(f, immediateNotify) {
-        if(typeof f != 'function') return new Error('Invalid argument')
-
-        connectionListeners.push(f)
-        if(immediateNotify)
-            f(client.isConnected())
+    addRobotConnectionListener(callback: (connected: boolean) => any): void {
+        connectionListeners.push(callback)
     },
+
     /**
      * Set a function that will be called whenever any NetworkTables value is changed
-     * @param {(key: string, value: any, isNew: boolean) => any} f When any key changes, this function will be called with the following parameters key: key name for entry, value: value of entry, isNew: If true, the entry has just been created
-     * @param {boolean} [immediateNotify] If true, the function will be immediately called with the current value of all keys
+     * @param callback When any key changes, this function will be called with the following parameters key: key name for entry, value: value of entry, isNew: If true, the entry has just been created
      */
-    addGlobalListener(f, immediateNotify) {
-        if(typeof f != 'function') return new Error('Invalid argument')
-
-        globalListeners.push(f)
-        if(immediateNotify) {
-            for (let key in keys) {
-                f(key, keys[key].val, keys[key].new)
-                keys[key].new = false
-            }
-        }
+    addGlobalListener(callback: (value: any) => any) : void {
+        globalListeners.push(callback)
     },
+
     /**
      * Set a function that will be called whenever a value for a particular key is changed in NetworkTables
-     * @param {string} key A networktables key to listen for
-     * @param {(key: string, value: any, isNew: boolean) => any} f When the key changes, this function will be called with the following parameters key: key name for entry, value: value of entry, isNew: If true, the entry has just been created
-     * @param {boolean} [immediateNotify] If true, the function will be immediately called with the current value of the specified key
+     * @param key A networktables key to listen for
+     * @param callback When the key changes, this function will be called with the following parameters key: key name for entry, value: value of entry, isNew: If true, the entry has just been created
      */
-    addKeyListener(key, f, immediateNotify) {
-        if(typeof key != 'string' || typeof f != 'function') return new Error('Valid Arguments are (string, function)')
-
+    addKeyListener(key: string, callback: (value: any) => void) : void {
         if(typeof keyListeners[key] != 'undefined') {
-            keyListeners[key].push(f)
+            keyListeners[key].push(callback)
         }
         else {
-            keyListeners[key] = [f]
-        }
-        if(immediateNotify && key in keys) {
-            let temp = keys[key]
-            f(key, temp.val, temp.new)
+            keyListeners[key] = [callback]
         }
     },
+
     /**
      * Use this to test whether a value is present in the table or not
-     * @param {string} key A networktables key
+     * @param key A networktables key
      * @returns true if a key is present in NetworkTables, false otherwise
      */
-    containsKey(key) {
+    containsKey(key: string) : boolean {
         if(typeof key != 'string') return false
         return key in keys
     },
+
     /**
      * Get all keys in the NetworkTables
      * @returns all the keys in the NetworkTables
      */
-    getKeys() {
+    getKeys(): string[] {
         return Object.keys(keys)
     },
+
     /**
      * Returns the value that the key maps to. If the websocket is not open, this will always return the default value specified.
-     * @param {string} key A networktables key
-     * @param {any} [defaultValue] If the key isn’t present in the table, return this instead
+     * @param key A networktables key
      * @returns value of key if present, undefined or defaultValue otherwise
      */
-    getValue(key, defaultValue) {
-        if(typeof key != 'string') return new Error('Invalid Argument')
-
+    getValue(key: string): any {
         if(typeof keys[key] != 'undefined') {
             return keys[key].val
         }
-        else {
-            return defaultValue
-        }
     },
+
     /**
      * @returns null if the robot is not connected, or a string otherwise
      */
-    getRobotAddress() {
+    getRobotAddress(): string {
         return client.isConnected() ? robotAddress : null
     },
+
     /**
      * @returns true if the robot is connected
      */
-    isRobotConnected() {
+    isRobotConnected(): boolean {
         return client.isConnected()
     },
+
     /**
      * Sets the value in NetworkTables. If the websocket is not connected, the value will be discarded.
-     * @param {string} key A networktables key
+     * @param key A networktables key
      * @param value The value to set (see warnings)
      */
-    putValue(key, value) {
-        if(typeof key != 'string') return new Error('Invalid Argument')
+    putValue(key: string, value: any): void {
         if(!client.isConnected()) return
 
         if(typeof keys[key] != 'undefined') {
@@ -162,42 +107,29 @@ const NetworkTables = {
         else {
             client.Assign(value, key) //(mesg.fzlags & 1) === 1
         }
-        /*
-        globalListeners.map(listenerCallback => listenerCallback(value))
-        if(keyListeners[key]) {
-            keyListeners[key].map(listenerCallback => listenerCallback(value))
-        }
-        */
     },
+
     /**
-     * Creates a new empty map (or hashtable) object and returns it. The map is safe to store NetworkTables keys in.
-     * @returns map object, with forEach/get/has/set functions defined. Simlar to a map object when using d3.js
-     */
-    create_map() {
-        return new d3_map()
-    },
-    /**
-     * Escapes NetworkTables keys so that they’re valid HTML identifiers.
+     * Escapes special characters and returns a valid jQuery selector. Useful as NetworkTables does not really put any limits on what keys can be used.
      * @param key A networktables key
      * @returns Escaped value
      */
-    keyToId: encodeURIComponent,
-    /**
-     * Escapes special characters and returns a valid jQuery selector. Useful as NetworkTables does not really put any limits on what keys can be used.
-     * @param {string} key A networktables key
-     * @returns Escaped value
-     */
-    keySelector(key) {
+    keySelector(key: string): any {
         return encodeURIComponent(key).replace(/([&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1')
     },
 
-    // When the user chooses the address of the bot than try to connect
-    tryToConnect(address, port?) {
+    /**
+     * Attempt a connection to the robot
+     * @param address Address to connect to
+     * @param port Optional port
+     */
+    tryToConnect(address: string, port?: number): void {
         console.log(`Trying to connect to ${address}` + (port ? ':' + port : ''))
-        let callback = (con, err) => {
+        let callback = (con: boolean, err: any) => {
             console.log('Sending status')
-            connectionUpdate(con)
+            connectionListeners.map(listenerCallback => listenerCallback(con))
             if(err) console.log(err)
+            if(con) robotAddress = address
         }
         if(port) {
             client.start(callback, address, port)
@@ -205,7 +137,11 @@ const NetworkTables = {
             client.start(callback, address)
         }
     },
-    disconnect() {
+
+    /**
+     * Disconnects from the robot
+     */
+    disconnect(): void {
         client.removeListener(clientListener)
     }
 }

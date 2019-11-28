@@ -29,7 +29,7 @@ export default class ConnectWidget extends React.Component<IProps, IState> {
     
     componentDidMount = () => {
         // Set function to be called when robot dis/connects
-        NetworkTables.addRobotConnectionListener(this.onRobotConnection, false)
+        NetworkTables.addRobotConnectionListener(this.onRobotConnection)
         this.setLogin()
     }
 
