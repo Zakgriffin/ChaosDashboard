@@ -126,7 +126,6 @@ const NetworkTables = {
     tryToConnect(address: string, port?: number): void {
         console.log(`Trying to connect to ${address}` + (port ? ':' + port : ''))
         let callback = (con: boolean, err: any) => {
-            console.log('Sending status')
             connectionListeners.map(listenerCallback => listenerCallback(con))
             if(err) console.log(err)
             if(con) robotAddress = address

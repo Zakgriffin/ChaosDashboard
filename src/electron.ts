@@ -17,7 +17,6 @@ function createWindow() {
     })
 
     win.on('closed', () => {
-        console.log('main window closed')
         NetworkTables.disconnect()
     })
 }

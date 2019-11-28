@@ -35,7 +35,6 @@ export default class ConnectWidget extends React.Component<IProps, IState> {
 
     onRobotConnection = (connected: boolean) => {
         this.setState({connectedState: (connected ? 'Robot connected!' : 'Robot disconnected.')})
-        console.log(connected)
         
         if(connected) {
             // On connect hide the connect popup
