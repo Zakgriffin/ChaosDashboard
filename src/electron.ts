@@ -1,7 +1,7 @@
-import {app, BrowserWindow, ipcMain} from 'electron'
+import {app, BrowserWindow} from 'electron'
 import NetworkTables from './network/networktables'
 
-function createWindow() {
+app.on('ready', () => {
     let win = new BrowserWindow({
         width: 800,
         height: 600,
@@ -12,20 +12,13 @@ function createWindow() {
     })
     win.loadFile('index.html')
 
-    ipcMain.on('windowError', (ev, error) => {
-        console.log(error)
-    })
-
     win.on('closed', () => {
         NetworkTables.disconnect()
     })
-}
 
-app.on('ready', () => {
-    console.log('App is ready')
-    createWindow()
+    console.log('App Ready')
 })
 
-app.on('quit', function () {
-    console.log('Application quit.')
+app.on('quit', () => {
+    console.log('App Quit')
 })

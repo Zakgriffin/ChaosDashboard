@@ -28,7 +28,7 @@ export default class Login extends React.Component<IProps, IState> {
     
     componentDidMount() {
         // Set function to be called when robot dis/connects
-        NetworkTables.addRobotConnectionListener(this.onRobotConnection)
+        NetworkTables.addConnectionListener(this.onRobotConnection)
         this.setLogin()
     }
 

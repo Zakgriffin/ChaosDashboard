@@ -24,7 +24,7 @@ const NetworkTables = {
      * When a listener function is called with a ‘true’ parameter, the NetworkTables.getRobotAddress() function will return a non-null value.
      * @param callback a function that will be called with a single boolean parameter that indicates whether the robot is connected
      */
-    addRobotConnectionListener(callback: (connected: boolean) => any): void {
+    addConnectionListener(callback: (connected: boolean) => any): void {
         connectionListeners.push(callback)
     },
 
@@ -44,8 +44,7 @@ const NetworkTables = {
     addKeyListener(key: string, callback: (value: any) => void) : void {
         if(typeof keyListeners[key] != 'undefined') {
             keyListeners[key].push(callback)
-        }
-        else {
+        } else {
             keyListeners[key] = [callback]
         }
     },
@@ -56,7 +55,6 @@ const NetworkTables = {
      * @returns true if a key is present in NetworkTables, false otherwise
      */
     containsKey(key: string) : boolean {
-        if(typeof key != 'string') return false
         return key in keys
     },
 
