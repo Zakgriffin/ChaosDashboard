@@ -1,20 +1,45 @@
-import * as React from 'react';
+import * as React from 'react'
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
-import NetworkTables from '../network/networktables'
+import './Simulation.css'
+//import NetworkTables from '../network/networktables'
 
-export default class Simulation extends React.Component {
-    private mount: HTMLDivElement
-    private robot: THREE.Object3D
+interface IProps {}
+interface IState {
+    fullscreen: boolean
+    size: {x: number, y: number}
+    resolution: number
+    scale: number
+    renderer: THREE.WebGLRenderer
+}
+
+export default class Simulation extends React.Component<IProps, IState> {
+    mount: any
+    robot: any
+
+    constructor(props: IProps) {
+        super(props)
+
+        this.state = {
+            fullscreen: false,
+            size: {x: 495, y: 210},
+            resolution: 1,
+            scale: 2.35,
+            renderer: undefined
+        }
+    }
 
     componentDidMount() {
+        let s = this.state
         const scene = new THREE.Scene()
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000)
+        const camera = new THREE.PerspectiveCamera(75, s.size.x/s.size.y, 0.1, 1000)
         const renderer = new THREE.WebGLRenderer()
+        renderer.setSize(s.size.x, s.size.y);
+        renderer.setPixelRatio(s.scale);
 
-        renderer.setSize(window.innerWidth, window.innerHeight)
         this.mount.appendChild(renderer.domElement)
+        this.setState({renderer})
 
         let light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
         scene.add(light)
@@ -35,7 +60,7 @@ export default class Simulation extends React.Component {
             //robot.rotation.y += 0.1
 
             renderer.render(scene, camera)
-            NetworkTables.putValue('/SmartDashboard/thing', camera.position.x)
+            //NetworkTables.putValue('/SmartDashboard/thing', camera.position.x)
         }
         /*
         var geometry = new THREE.BoxBufferGeometry( 30, 30, 30 );
@@ -69,15 +94,31 @@ export default class Simulation extends React.Component {
         controls.maxPolarAngle = Math.PI / 2 - 0.1
 
         camera.position.z = 300
-
+        /*
         NetworkTables.addKeyListener('/SmartDashboard/test', (value) => {
             robot.rotation.y = value / 10
-        })
+        })*/
+    }
+
+    toggleFullscreen = () => {
+        let s = this.state
+        this.setState({fullscreen: !s.fullscreen})
+        
+        if(s.fullscreen) {
+            s.renderer.setPixelRatio(s.resolution);
+            s.renderer.setSize(s.size.x, s.size.y);
+        } else {
+            s.renderer.setPixelRatio(s.resolution * s.scale);
+            s.renderer.setSize(s.size.x * s.scale, s.size.y * s.scale);
+        }
     }
 
     render() {
         return (
-            <div ref={ref => (this.mount = ref)}/>
+            <div id='simulation'
+                ref={ref => (this.mount = ref)}
+                onDoubleClick={this.toggleFullscreen}
+            />
         )
     }
 }

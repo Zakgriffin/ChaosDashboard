@@ -1,0 +1,11 @@
+#simulation > canvas {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    transition: 0.2s;
+    border: 2px solid white;
+}
+
+#simulation > canvas:focus {
+    outline: none;
+}

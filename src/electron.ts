@@ -3,8 +3,9 @@ import NetworkTables from './network/networktables'
 
 app.on('ready', () => {
     let win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 532,
+        resizable: false,
         //icon: null,
         webPreferences: {
             nodeIntegration: true

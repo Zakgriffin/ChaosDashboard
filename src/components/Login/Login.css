@@ -1,0 +1,60 @@
+#blur-container {
+    width: 100%;
+    height: 100%;
+    filter: blur(10);
+    background-color: #000000bb;
+    z-index: 1;
+}
+
+#blur-container > svg {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    width: 170px;
+    margin-top: 100px;
+}
+
+#team-number-input {
+    position: relative;
+    display: flex;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 30px;
+    background-color: rgb(67, 67, 67);
+    text-align: center;
+    font-size: 2em;
+    border: 0;
+    border-radius: 10px;
+    height: 45px;
+    width: 130px;
+    color: orange;
+    outline: none;
+    transition: 0.2s;
+}
+#team-number-input:hover {
+    border-radius: 25px;
+}
+
+#login-connect {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 10px;
+    font-size: 0.9em;
+    border: 0;
+    border-radius: 10px;
+    height: 20px;
+    width: 80px;
+    padding: 0 5px 5px 5px;
+    cursor: pointer;
+    background-color: rgb(67, 67, 67);
+    transition: 0.2s;
+}
+
+#login-connect:focus {
+    outline: none;
+}
+
+#login-connect:hover {
+    background-color: green;
+}

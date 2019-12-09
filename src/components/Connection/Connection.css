@@ -1,0 +1,43 @@
+#connection {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    transform: translate(-50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#connection-indicator {
+    width: 180px;
+    height: 35px;
+    background-color: #434343;
+    border: 0;
+    border-radius: 8px;
+    font-size: 1.1em;
+}
+
+#connection-indicator:focus {
+    outline: none;
+}
+
+#connection-disconnect {
+    margin-top: 5px;
+    width: 60px;
+    height: 16px;
+    background-color: #434343;
+    border: 0;
+    border-radius: 4px;
+    font-size: 0.6em;
+    transition: 0.2s;
+    color: #cccccc
+}
+#connection-disconnect:hover {
+    cursor: pointer;
+    background-color: #333333;
+    color: white
+}
+#connection-disconnect:focus {
+    outline: none;
+}

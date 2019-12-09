@@ -1,0 +1,17 @@
+#time-meter {
+    position: fixed;
+    right: 0;
+    top: 90px;
+    width: 100px;
+    height: 320px;
+}
+
+#time-meter-graphic > path {
+    transition: 0.3s;
+    stroke: #ffffff;
+    stroke-width: 6;
+}
+
+#time-meter-label {
+    font-size: 1em;
+}

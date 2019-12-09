@@ -1,0 +1,16 @@
+#suction {
+    left: 50%;
+    top: 80px;
+    transform: translate(-50%);
+    position: absolute;
+    width: 180px;
+    height: 180px;
+}
+
+#suction-indicator {
+    transition: 0.3s;
+}
+
+#suction-graphic:hover {
+    cursor: pointer;
+}
