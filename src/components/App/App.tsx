@@ -7,6 +7,8 @@ import Connection from '../Connection/Connection'
 import Simulation from '../Simulation/Simulation'
 import Login from '../Login/Login'
 
+import NetworkTables from '../../network/networktables'
+
 interface IProps {}
 interface IState {
     teamNumber: number,
@@ -25,8 +27,25 @@ export default class App extends React.Component<IProps, IState> {
         }
     }
 
+    componentDidMount = () => {
+        NetworkTables.addConnectionListener((connected) => {
+            this.setState({
+                connected: connected
+            })
+        })
+    }
+
     tryLogin = (teamNumber) => {
-        this.setState({connecting: true})
+        this.setState({
+            connecting: true,
+            teamNumber
+        })
+        let address = `roborio-${teamNumber}-frc.local`
+        NetworkTables.tryToConnect(address)
+        setTimeout(() => {
+            this.setState({connecting: false})
+        }, 2000)
+        /*
         setTimeout(() => {
             this.setState({
                 teamNumber,
@@ -34,6 +53,7 @@ export default class App extends React.Component<IProps, IState> {
                 connected: true
             })
         }, 1000)
+        */
     }
 
     disconnect = () => {
@@ -44,7 +64,7 @@ export default class App extends React.Component<IProps, IState> {
     }
 
     render() {
-        let login = !this.state.teamNumber ? <Login tryLogin={this.tryLogin} connecting={this.state.connecting}/> : undefined
+        let login = !this.state.connected ? <Login tryLogin={this.tryLogin} connecting={this.state.connecting}/> : undefined
         return (
             <div id = 'App'>
                 <TimeMeter/>

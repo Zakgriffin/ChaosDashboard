@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './Gyro.css'
 import GyroGraphic from './GyroGraphic';
+import NetworkTables from '../../network/networktables';
 
 interface IProps {}
 interface IState {
@@ -17,9 +18,9 @@ export default class Gyro extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
-        setInterval(() => {
-            this.setState({angle: (this.state.angle + 1) % 360})
-        }, 10)
+        NetworkTables.addKeyListener('/SmartDashboard/gyro', angle => {
+            this.setState({angle})
+        })
     }
 
     componentDidUpdate() {
@@ -31,7 +32,7 @@ export default class Gyro extends React.Component<IProps, IState> {
         return (
             <div id = 'Gyro'>
                 <GyroGraphic id = 'gyro-graphic'/>
-                <h1 id = 'gyro-label'>{this.state.angle}</h1>
+                <h1 id = 'gyro-label'>{Math.round(this.state.angle)}</h1>
             </div>
         )
     }

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import './Suction.css'
 import SuctionGraphic from './SuctionGraphic';
+import NetworkTables from '../../network/networktables';
 
 interface IProps {}
 interface IState {
@@ -15,6 +16,13 @@ export default class Suction extends React.Component<IProps, IState> {
             active: true
         }
     }
+
+    componentDidMount = () => {
+        NetworkTables.addKeyListener('/SmartDashboard/suction', active => {
+            if(active != this.state.active) this.setState({active})
+        })
+    }
+
     componentDidUpdate = () => {
         let indicator = document.getElementById('suction-indicator')
         if(this.state.active) {
@@ -24,6 +32,8 @@ export default class Suction extends React.Component<IProps, IState> {
             indicator.style.transform = `translate(-124px)`
             indicator.style.fill = '#c91828'
         }
+
+        NetworkTables.putValue('/SmartDashboard/suction', this.state.active)
     }
 
     handleClick = () => {

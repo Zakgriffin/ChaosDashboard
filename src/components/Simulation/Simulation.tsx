@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 import './Simulation.css'
+import NetworkTables from '../../network/networktables'
 //import NetworkTables from '../network/networktables'
 
 interface IProps {}
@@ -12,6 +13,8 @@ interface IState {
     resolution: number
     scale: number
     renderer: THREE.WebGLRenderer
+    simX: number
+    simY: number
 }
 
 export default class Simulation extends React.Component<IProps, IState> {
@@ -26,11 +29,21 @@ export default class Simulation extends React.Component<IProps, IState> {
             size: {x: 495, y: 210},
             resolution: 1,
             scale: 2.35,
-            renderer: undefined
+            renderer: undefined,
+
+            simX: 0,
+            simY: 0
         }
     }
 
     componentDidMount() {
+        NetworkTables.addKeyListener('/SmartDashboard/simX', simX => {
+            this.setState({simX})
+        })
+        NetworkTables.addKeyListener('/SmartDashboard/simY', simY => {
+            this.setState({simY})
+        })
+
         let s = this.state
         const scene = new THREE.Scene()
         const camera = new THREE.PerspectiveCamera(75, s.size.x/s.size.y, 0.1, 1000)
@@ -56,6 +69,8 @@ export default class Simulation extends React.Component<IProps, IState> {
         let animate = () => {
             requestAnimationFrame(animate)
             
+            if(this.robot) this.robot.position.set(this.state.simX, 0, this.state.simY)
+
             controls.update()
             //robot.rotation.y += 0.1
 
@@ -70,13 +85,14 @@ export default class Simulation extends React.Component<IProps, IState> {
         */
 
         const loader = new GLTFLoader()
-        loader.load('../models/robot_model/scene.gltf', function (gltf) {
+        loader.load('../models/robot_model/scene.gltf', (gltf) => {
             robot = gltf.scene.children[0].children[0].children[0]
 
             robot.position.set(5, 33, -93)
             let scale = 0.4
             robot = new THREE.Object3D().add(robot)
             robot.scale.set(scale, scale, scale)
+            this.robot = robot
             scene.add(robot)
 
             animate()

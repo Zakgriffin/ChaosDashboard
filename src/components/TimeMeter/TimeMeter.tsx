@@ -1,5 +1,6 @@
 import * as React from 'react'
 import './TimeMeter.css'
+import NetworkTables from '../../network/networktables'
 
 interface IProps {
     width?: any
@@ -36,10 +37,14 @@ export default class TimeMeter extends React.Component<IProps, IState> {
         this.stageTimes = {}
     }
     componentDidMount = () => {
-        
+        NetworkTables.addKeyListener('/SmartDashboard/timer', currentTime => {
+            this.setState({currentTime})
+        })
+        /*
         setInterval(() => {
             this.setState({currentTime:this.state.currentTime + 0.1}) //Math.random() * this.state.size) % 360
         }, 100)
+        */
 
         let curr = this.state.totalTime
         Object.keys(this.state.stages).map(key => {
