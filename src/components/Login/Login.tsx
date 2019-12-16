@@ -3,7 +3,7 @@ import './Login.css'
 import Logo from './Logo';
 
 interface IProps {
-    tryLogin: (num: string) => void
+    tryLogin: (num: number) => void
     connecting: boolean
 }
 interface IState {
@@ -18,7 +18,7 @@ export default class Login extends React.Component<IProps, IState> {
         }
     }
 
-    handleChange = (e) => {
+    handleChange = (e: any) => {
         let val = e.target.value.trim()
         if(val.length <= 4 && !isNaN(val)) {
             this.setState({teamNumber: val})
@@ -36,10 +36,10 @@ export default class Login extends React.Component<IProps, IState> {
     }
 
     handleClickConnect = () => {
-        this.props.tryLogin(this.state.teamNumber)
+        this.props.tryLogin(parseInt(this.state.teamNumber))
     }
 
-    handleKeyDown = ev => {
+    handleKeyDown = (ev: { key: string }) => {
         if(ev.key === 'Enter') {
             this.handleClickConnect()
         }

@@ -12,7 +12,7 @@ interface IState {
     size: {x: number, y: number}
     resolution: number
     scale: number
-    renderer: THREE.WebGLRenderer
+    renderer: THREE.WebGLRenderer | undefined
     simX: number
     simY: number
 }
@@ -120,6 +120,7 @@ export default class Simulation extends React.Component<IProps, IState> {
         let s = this.state
         this.setState({fullscreen: !s.fullscreen})
         
+        if(!s.renderer) return
         if(s.fullscreen) {
             s.renderer.setPixelRatio(s.resolution);
             s.renderer.setSize(s.size.x, s.size.y);

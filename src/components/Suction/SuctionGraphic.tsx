@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export default function SuctionGraphic(props) {
+export default function SuctionGraphic(props: any) {
     return (
         <svg onClick={props.click} version="1.1" viewBox="0.0 0.0 960.0 960.0" fill="none" stroke="none" strokeLinecap="square" strokeMiterlimit="10">
             <clipPath id="p.0">

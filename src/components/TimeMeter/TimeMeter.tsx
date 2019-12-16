@@ -16,7 +16,7 @@ interface IState {
 
 export default class TimeMeter extends React.Component<IProps, IState> {
     stageBars: any
-    stageTimes: object
+    stageTimes: {[stage: string]: number}
 
     constructor(props: IProps) {
         super(props)
@@ -54,6 +54,7 @@ export default class TimeMeter extends React.Component<IProps, IState> {
         })
         
         let timeMeterGraphic = document.getElementById('time-meter-graphic')
+        if(!timeMeterGraphic) return
         for(let stage of Object.keys(this.state.stages)) {
             let negPath = document.createElementNS('http://www.w3.org/2000/svg', 'path')
             negPath.setAttribute('d', this.pathString(this.stageTimes[stage], 'start'))
@@ -86,7 +87,7 @@ export default class TimeMeter extends React.Component<IProps, IState> {
         hand.setAttribute('d', this.pathString(undefined, 'hand'))
     }
 
-    pathString = (time, type?) => {
+    pathString = (time: any, type?: any) => {
         let s = this.state
 
         let w = s.width

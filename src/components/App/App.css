@@ -19,3 +19,44 @@ body {
     overflow: hidden;
     display: flex;
 }
+
+#root {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+}
+#Test {
+    height: 100%;
+    
+    background-color: black;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    text-align: center;
+}
+#Test > div:nth-child(3n) {
+    background-color: red;
+}
+#Test > div:nth-child(3n + 1) {
+    background-color: green;
+}
+#Test > div:nth-child(3n + 2) {
+    background-color: blue;
+}
+
+
+#Simulation {
+    grid-row: 2/-1;
+    grid-column: 1/3;
+}
+#Logo {
+    grid-row: 1/2;
+    grid-column: 5/6;
+}
+#Meter {
+    grid-row: 2/-1;
+    grid-column: 5/6;
+}
+#Arm {
+    grid-row: 1/-1;
+    grid-column: 4/5;
+}

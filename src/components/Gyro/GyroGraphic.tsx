@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-export default function GyroGraphic(props) {
+export default function GyroGraphic(props: any) {
     return (
-        <svg viewBox="0.0 0.0 960.0 720.0">
+        <svg viewBox="0.0 0.0 960.0 720.0" id={props.id}>
             <clipPath id="p.0">
                 <path d="m0 0l960.0 0l0 720.0l-960.0 0l0 -720.0z" clipRule="nonzero"/>
             </clipPath>

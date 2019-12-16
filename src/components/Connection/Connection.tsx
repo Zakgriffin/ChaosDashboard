@@ -5,13 +5,14 @@ interface IProps {
     connected: boolean
     disconnect: () => void
     teamNumber: number
+    teamColor?: string
 }
 interface IState {
     teamColor: string
 }
 
 export default class Connection extends React.Component<IProps, IState> {
-    constructor(props) {
+    constructor(props: IProps) {
         super(props)
         this.state = {
             teamColor: props.teamColor || '#4a86e8',

@@ -3,11 +3,11 @@ import * as wpilib_NT from 'wpilib-nt-client'
 const client = new wpilib_NT.Client()
 client.setReconnectDelay(1000)
 
-let keys = {},
-    connectionListeners = [],
-    globalListeners = [],
-    keyListeners = {},
-    robotAddress = undefined
+let keys: {[key: string]: {id: any, val: any}} = {},
+    connectionListeners: {(connected: boolean): void} [] = [],
+    globalListeners: {(value: string): void} [] = [],
+    keyListeners: {[key: string]: [(value: string) => void]} = {},
+    robotAddress: string = ''
 
 const clientListener = client.addListener((key, value/*, valType, mesgType, id, flags*/) => {
     globalListeners.map(listenerCallback => listenerCallback(value))
@@ -81,7 +81,7 @@ const NetworkTables = {
      * @returns null if the robot is not connected, or a string otherwise
      */
     getRobotAddress(): string {
-        return client.isConnected() ? robotAddress : null
+        return client.isConnected() ? robotAddress : ''
     },
 
     /**

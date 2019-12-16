@@ -12,5 +12,3 @@ React - For component based UI designing
 Electron - For transforming the web app into a standalone app
 
 Three - For 3D rendering, a simplified WebGL abstraction
-
-Webpack - For organizing entry points and transpiling

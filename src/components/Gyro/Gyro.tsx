@@ -25,7 +25,7 @@ export default class Gyro extends React.Component<IProps, IState> {
 
     componentDidUpdate() {
         let dial = document.getElementById('dial')
-        dial.style.transform = `rotate(${this.state.angle}deg)`
+        if(dial) dial.style.transform = `rotate(${this.state.angle}deg)`
     }
 
     render() {
