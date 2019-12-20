@@ -1,11 +1,11 @@
-import * as React from 'react'
+import React, {useState, useEffect} from 'react'
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 import './Simulation.css'
 import NetworkTables from '../../network/networktables'
 //import NetworkTables from '../network/networktables'
-
+/*
 interface IProps {}
 interface IState {
     fullscreen: boolean
@@ -16,40 +16,34 @@ interface IState {
     simX: number
     simY: number
 }
+*/
+export default function Simulation() {
+    /*
+    let [fullscreen, setFullscreen] = useState(false),
+        [size, setSize] = useState({x: 495, y: 210}),
+        [resolution, setResolution] = useState(1),
+        [scale, setScale] = useState(2.35),
+        [simX, setSimX] = useState(0),
+        [simY, setSimY] = useState(0)
+    let [others, setOthers] = useState({
+        mount: undefined
+        robot: undefined
+        renderer: undefined
+    })
 
-export default class Simulation extends React.Component<IProps, IState> {
-    mount: any
-    robot: any
-
-    constructor(props: IProps) {
-        super(props)
-
-        this.state = {
-            fullscreen: false,
-            size: {x: 495, y: 210},
-            resolution: 1,
-            scale: 2.35,
-            renderer: undefined,
-
-            simX: 0,
-            simY: 0
-        }
-    }
-
-    componentDidMount() {
-        NetworkTables.addKeyListener('/SmartDashboard/simX', simX => {
-            this.setState({simX})
+    useEffect(() => {
+        NetworkTables.addKeyListener('/SmartDashboard/simX', newSimX => {
+            setSimX(newSimX)
         })
-        NetworkTables.addKeyListener('/SmartDashboard/simY', simY => {
-            this.setState({simY})
+        NetworkTables.addKeyListener('/SmartDashboard/simY', newSimY => {
+            setSimX(newSimY)
         })
 
-        let s = this.state
         const scene = new THREE.Scene()
-        const camera = new THREE.PerspectiveCamera(75, s.size.x/s.size.y, 0.1, 1000)
+        const camera = new THREE.PerspectiveCamera(75, size.x/size.y, 0.1, 1000)
         const renderer = new THREE.WebGLRenderer()
-        renderer.setSize(s.size.x, s.size.y);
-        renderer.setPixelRatio(s.scale);
+        renderer.setSize(size.x, size.y);
+        renderer.setPixelRatio(scale);
 
         this.mount.appendChild(renderer.domElement)
         this.setState({renderer})
@@ -83,9 +77,11 @@ export default class Simulation extends React.Component<IProps, IState> {
         var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
         scene.add( line );
         */
-
+        //import '../../../models/robot_model/'
         const loader = new GLTFLoader()
-        loader.load('../models/robot_model/scene.gltf', (gltf) => {
+        /*
+        loader.load('../../../models/robot_model', (gltf) => {
+            console.log(gltf)
             robot = gltf.scene.children[0].children[0].children[0]
 
             robot.position.set(5, 33, -93)
@@ -99,7 +95,8 @@ export default class Simulation extends React.Component<IProps, IState> {
         }, undefined, function (error) {
             console.error(error)
         })
-
+        */
+/*
         let controls = new OrbitControls(camera, renderer.domElement)
         //controls.addEventListener('change', render) // call this only in static scenes (i.e., if there is no animation loop)
         controls.enableDamping = true // an animation loop is required when either damping or auto-rotation are enabled
@@ -114,9 +111,11 @@ export default class Simulation extends React.Component<IProps, IState> {
         NetworkTables.addKeyListener('/SmartDashboard/test', (value) => {
             robot.rotation.y = value / 10
         })*/
+        /*
+        animate()
     }
 
-    toggleFullscreen = () => {
+    function toggleFullscreen = () => {
         let s = this.state
         this.setState({fullscreen: !s.fullscreen})
         
@@ -130,12 +129,12 @@ export default class Simulation extends React.Component<IProps, IState> {
         }
     }
 
-    render() {
-        return (
-            <div id='simulation'
-                ref={ref => (this.mount = ref)}
-                onDoubleClick={this.toggleFullscreen}
-            />
-        )
-    }
+    return (
+        <div id='simulation'
+            ref={ref => (this.mount = ref)}
+            onDoubleClick={this.toggleFullscreen}
+        />
+    )
+    */
+   return <div></div>
 }

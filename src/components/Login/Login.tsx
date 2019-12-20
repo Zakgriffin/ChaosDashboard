@@ -27,9 +27,9 @@ export default class Login extends React.Component<IProps, IState> {
 
     colorCheck = () => {
         let num = this.state.teamNumber
-        if(num == '2458') {
+        if(num === '2458') {
             return '#4a86e8'
-        } else if(num.length == 4) {
+        } else if(num.length === 4) {
             return '#26b145'
         }
         return 'orange'
@@ -59,7 +59,7 @@ export default class Login extends React.Component<IProps, IState> {
                         color: this.colorCheck()
                     }}/>
                 <button id = 'login-connect'
-                    style={{opacity: s.teamNumber.length == 4 ? 1 : 0}}
+                    style={{opacity: s.teamNumber.length === 4 ? 1 : 0}}
                     onClick={this.handleClickConnect}
                 >
                     {this.props.connecting ? 'Connecting' : 'Connect'}

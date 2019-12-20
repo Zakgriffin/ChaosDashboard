@@ -1,13 +1,14 @@
-import * as React from 'react'
+import React, {useState} from 'react'
 import {Rnd} from 'react-rnd'
+import './Draggable.css'
 
 export default function Draggable(props: any) {
-    let [editable, setEditable] = React.useState(true)
+    let [editable, setEditable] = useState(true)
 
-    return (
+    return <> {
         React.Children.map(props.children, (child) => {
             let {x = 0, y = 0, width = 40, height = 40} = child.props
-            return <Rnd
+            return <Rnd className='draggable'
                 default={{x, y, width, height}}
                 dragGrid={[20, 20]}
                 resizeGrid={[20, 20]}
@@ -29,5 +30,5 @@ export default function Draggable(props: any) {
                 {child}
             </Rnd>
         })
-    )
+    }</>
 }

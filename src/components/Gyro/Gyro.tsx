@@ -1,39 +1,28 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import './Gyro.css'
 import GyroGraphic from './GyroGraphic';
 import NetworkTables from '../../network/networktables';
 
-interface IProps {}
-interface IState {
-    angle: number
-}
+export default function Gyro() {
+    let [angle, setAngle] = useState(45)
 
-export default class Gyro extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props)
-        
-        this.state = {
-            angle: 0
-        }
-    }
-
-    componentDidMount() {
-        NetworkTables.addKeyListener('/SmartDashboard/gyro', angle => {
-            this.setState({angle})
+    useEffect(() => {
+        NetworkTables.addKeyListener('/SmartDashboard/gyro', newAngle => {
+            setAngle(newAngle)
         })
-    }
-
-    componentDidUpdate() {
-        let dial = document.getElementById('dial')
-        if(dial) dial.style.transform = `rotate(${this.state.angle}deg)`
-    }
-
-    render() {
-        return (
-            <div id = 'Gyro'>
-                <GyroGraphic id = 'gyro-graphic'/>
-                <h1 id = 'gyro-label'>{Math.round(this.state.angle)}</h1>
-            </div>
-        )
-    }
+    }, [])
+    
+    return (
+        <div id = 'gyro'
+            style={{
+                width: '100%',
+                height: '100%'
+            }}
+        >
+            <GyroGraphic id = 'gyro-graphic'
+                angle = {angle}
+            />
+            <h1 id = 'gyro-label'>{Math.round(angle)}</h1>
+        </div>
+    )
 }

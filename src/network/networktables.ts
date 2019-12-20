@@ -113,7 +113,7 @@ const NetworkTables = {
      * @returns Escaped value
      */
     keySelector(key: string): any {
-        return encodeURIComponent(key).replace(/([&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1')
+        return encodeURIComponent(key).replace(/([&,.+*~':"!^#$%@[]()=>\|])/g, '\\$1')
     },
 
     /**

@@ -1,15 +1,11 @@
-#Gyro {
-    position: absolute;
-    left: 300px;
-    top: 50px;
-    width: 230px;
-    height: 230px;
+#gyro {
+
 }
 
 #gyro-graphic {
     position: relative;
     top: 50%;
-    transform: translate(0%, -50%);
+    transform: translateY(-50%);
 }
 
 #dial {
@@ -17,10 +13,8 @@
 }
 
 #gyro-label {
-    float: left;
-    position: relative;
-    top: -170px;
+    position: absolute;
     left: 50%;
-    transform: translate(-50%);
+    transform: translateX(-50%, -50%);
     font-size: 1em;
 }
