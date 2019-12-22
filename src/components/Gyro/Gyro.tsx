@@ -22,7 +22,7 @@ export default function Gyro() {
             <GyroGraphic id = 'gyro-graphic'
                 angle = {angle}
             />
-            <h1 id = 'gyro-label'>{Math.round(angle)}</h1>
+            <div id = 'gyro-label'>{Math.round(angle)}</div>
         </div>
     )
 }
