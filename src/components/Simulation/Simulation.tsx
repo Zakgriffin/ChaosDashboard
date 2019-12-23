@@ -1,24 +1,14 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 import './Simulation.css'
 import NetworkTables from '../../network/networktables'
-//import NetworkTables from '../network/networktables'
-/*
-interface IProps {}
-interface IState {
-    fullscreen: boolean
-    size: {x: number, y: number}
-    resolution: number
-    scale: number
-    renderer: THREE.WebGLRenderer | undefined
-    simX: number
-    simY: number
-}
-*/
+
 export default function Simulation() {
     /*
+    const mountRef = useRef<HTMLDivElement>()
+
     let [fullscreen, setFullscreen] = useState(false),
         [size, setSize] = useState({x: 495, y: 210}),
         [resolution, setResolution] = useState(1),
@@ -26,10 +16,12 @@ export default function Simulation() {
         [simX, setSimX] = useState(0),
         [simY, setSimY] = useState(0)
     let [others, setOthers] = useState({
-        mount: undefined
-        robot: undefined
+        mount: undefined,
+        robot: undefined,
         renderer: undefined
     })
+    let [robot, setRobot] = useState<THREE.Object3D>()
+    let [renderer, setRenderer] = useState<THREE.WebGLRenderer>()
 
     useEffect(() => {
         NetworkTables.addKeyListener('/SmartDashboard/simX', newSimX => {
@@ -38,15 +30,19 @@ export default function Simulation() {
         NetworkTables.addKeyListener('/SmartDashboard/simY', newSimY => {
             setSimX(newSimY)
         })
+    }, [])
+
+    useEffect(() => {
+        const canvas = document.createElement('canvas')
+        const mount = mountRef.current
+        mount.appendChild(canvas)
 
         const scene = new THREE.Scene()
         const camera = new THREE.PerspectiveCamera(75, size.x/size.y, 0.1, 1000)
         const renderer = new THREE.WebGLRenderer()
+
         renderer.setSize(size.x, size.y);
         renderer.setPixelRatio(scale);
-
-        this.mount.appendChild(renderer.domElement)
-        this.setState({renderer})
 
         let light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
         scene.add(light)
@@ -58,12 +54,10 @@ export default function Simulation() {
         scene.add(plane)
         plane.rotation.x = Math.PI / 2
 
-        let robot = this.robot
-
         let animate = () => {
             requestAnimationFrame(animate)
             
-            if(this.robot) this.robot.position.set(this.state.simX, 0, this.state.simY)
+            if(robot) robot.position.set(simX, 0, simY)
 
             controls.update()
             //robot.rotation.y += 0.1
@@ -71,35 +65,10 @@ export default function Simulation() {
             renderer.render(scene, camera)
             //NetworkTables.putValue('/SmartDashboard/thing', camera.position.x)
         }
-        /*
-        var geometry = new THREE.BoxBufferGeometry( 30, 30, 30 );
-        var edges = new THREE.EdgesGeometry( geometry );
-        var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
-        scene.add( line );
-        */
-        //import '../../../models/robot_model/'
-        const loader = new GLTFLoader()
-        /*
-        loader.load('../../../models/robot_model', (gltf) => {
-            console.log(gltf)
-            robot = gltf.scene.children[0].children[0].children[0]
 
-            robot.position.set(5, 33, -93)
-            let scale = 0.4
-            robot = new THREE.Object3D().add(robot)
-            robot.scale.set(scale, scale, scale)
-            this.robot = robot
-            scene.add(robot)
-
-            animate()
-        }, undefined, function (error) {
-            console.error(error)
-        })
-        */
-/*
         let controls = new OrbitControls(camera, renderer.domElement)
-        //controls.addEventListener('change', render) // call this only in static scenes (i.e., if there is no animation loop)
-        controls.enableDamping = true // an animation loop is required when either damping or auto-rotation are enabled
+
+        controls.enableDamping = true
         controls.dampingFactor = 0.3
         controls.screenSpacePanning = false
         controls.minDistance = 10
@@ -107,32 +76,45 @@ export default function Simulation() {
         controls.maxPolarAngle = Math.PI / 2 - 0.1
 
         camera.position.z = 300
-        /*
-        NetworkTables.addKeyListener('/SmartDashboard/test', (value) => {
-            robot.rotation.y = value / 10
-        })*/
-        /*
-        animate()
-    }
 
-    function toggleFullscreen = () => {
-        let s = this.state
-        this.setState({fullscreen: !s.fullscreen})
+        NetworkTables.addKeyListener('/SmartDashboard/test', (value) => {
+            if(!robot) return
+            robot.rotation.y = value / 10
+        })
+
+        const loader = new GLTFLoader()
         
-        if(!s.renderer) return
-        if(s.fullscreen) {
-            s.renderer.setPixelRatio(s.resolution);
-            s.renderer.setSize(s.size.x, s.size.y);
+        loader.load('../../../models/robot_model', (gltf) => {
+            setRobot(gltf.scene.children[0].children[0].children[0])
+            if(!robot) return
+            robot.position.set(5, 33, -93)
+            let scale = 0.4
+            robot = new THREE.Object3D().add(robot)
+            robot.scale.set(scale, scale, scale)
+            scene.add(robot)
+
+            animate()
+        }, undefined, function(error) {
+            console.error(error)
+        })
+    }, [])
+
+    function toggleFullscreen() {
+        setFullscreen(!fullscreen)
+        if(!renderer) return
+        if(fullscreen) {
+            renderer.setPixelRatio(resolution);
+            renderer.setSize(size.x, size.y);
         } else {
-            s.renderer.setPixelRatio(s.resolution * s.scale);
-            s.renderer.setSize(s.size.x * s.scale, s.size.y * s.scale);
+            renderer.setPixelRatio(resolution * scale);
+            renderer.setSize(size.x * scale, size.y * scale);
         }
     }
 
     return (
-        <div id='simulation'
-            ref={ref => (this.mount = ref)}
-            onDoubleClick={this.toggleFullscreen}
+        <canvas id='simulation'
+            ref = {}
+            onDoubleClick={toggleFullscreen}
         />
     )
     */

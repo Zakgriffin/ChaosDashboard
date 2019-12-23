@@ -1,11 +1,17 @@
-#simulation > canvas {
+#simulation {
     position: absolute;
+    width: 600px;
+    height: 300px;
     left: 5px;
     bottom: 5px;
     transition: 0.2s;
     border: 2px solid white;
 }
 
-#simulation > canvas:focus {
+#simulation:focus {
     outline: none;
+}
+
+#simulation > div > canvas {
+    transition: 0.2s;
 }

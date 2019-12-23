@@ -9,14 +9,6 @@ import Simulation from '../Simulation/Simulation'
 
 import NetworkTables from '../../network/networktables'
 import Draggable from '../Draggable'
-//import DragToggle from '../DragToggle'
-
-interface IProps {}
-interface IState {
-    teamNumber: number,
-    connecting: boolean,
-    connected: boolean
-}
 
 export default function App() {
     let [teamNumber, setTeamNumber] = React.useState(0),
