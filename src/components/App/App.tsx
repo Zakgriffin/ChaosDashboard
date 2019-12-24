@@ -49,7 +49,11 @@ export default function App() {
             />
             <Simulation/>
             <Draggable>
-                <Gyro/>
+                <Gyro
+                    variables = {{
+                        angle: 'rotation'
+                    }}
+                />
             </Draggable>
         </div>
     )

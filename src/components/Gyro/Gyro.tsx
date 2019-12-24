@@ -1,16 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import './Gyro.css'
 import GyroGraphic from './GyroGraphic';
-import NetworkTables from '../../network/networktables';
+//import NetworkTables from '../../network/networktables'
+import useNetworkTable from '../../network/useNetworkTable'
 
-export default function Gyro() {
-    let [angle, setAngle] = useState(45)
-
-    useEffect(() => {
-        NetworkTables.addKeyListener('/SmartDashboard/gyro', newAngle => {
-            setAngle(newAngle)
-        })
-    }, [])
+export default function Gyro(props: {variables: {angle: string}}) {
+    let [angle] = useNetworkTable(props.variables.angle, 45)
     
     return (
         <div id = 'gyro'
