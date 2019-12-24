@@ -12,7 +12,7 @@ import Draggable from '../Draggable'
 
 export default function App() {
     let [teamNumber, setTeamNumber] = React.useState(0),
-        [connecting, setConnecting] = React.useState(false),
+        //[connecting, setConnecting] = React.useState(false),
         [connected, setConnected] = React.useState(false)
 
     React.useEffect(() => {
@@ -20,7 +20,7 @@ export default function App() {
             setConnected(connected)
         })
     }, [])
-
+    /*
     let tryLogin = (teamNumber: number) => {
         setConnecting(true)
         setTeamNumber(teamNumber)
@@ -30,6 +30,7 @@ export default function App() {
             setConnecting(false)
         }, 2000)
     }
+    */
 
     let disconnect = () => {
         setConnected(false)
@@ -40,8 +41,6 @@ export default function App() {
     return (
         <div id = 'App'>
             <TimeMeter/>
-            <Suction/>
-            
             <Connection
                 teamNumber={teamNumber}
                 connected={connected}
@@ -52,6 +51,15 @@ export default function App() {
                 <Gyro
                     variables = {{
                         angle: 'rotation'
+                    }}
+                    x={10}
+                    y={2}
+                    width={12}
+                    height={10}
+                />
+                <Suction
+                    variables = {{
+                        active: 'succing'
                     }}
                 />
             </Draggable>

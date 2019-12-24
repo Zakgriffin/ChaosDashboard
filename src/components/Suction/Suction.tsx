@@ -1,26 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import './Suction.css'
 import SuctionGraphic from './SuctionGraphic';
-import NetworkTables from '../../network/networktables';
+import useNetworkTable from '../../network/useNetworkTable';
 
-export default function Suction() {
-    let [active, setActive] = useState(false)
+interface IProps {
+    variables: {
+        active: string
+    }
+}
 
-    useEffect(() => {
-        NetworkTables.addKeyListener('/SmartDashboard/suction', newActive => {
-            if(newActive !== active) setActive(newActive)
-        })
-    }, [])
-
-    useEffect(() => {
-        NetworkTables.putValue('/SmartDashboard/suction', active)
-    }, [active])
+export default function Suction(props: IProps) {
+    let [active, setActive] = useNetworkTable(props.variables.active, false)
 
     return (
-        <div id = 'suction'>
+        <div className='suction widget'>
             <SuctionGraphic
                 active={active}
-                onClick = {() => setActive(!active)}
+                onClick={() => setActive(!active)}
             />
         </div>
     )

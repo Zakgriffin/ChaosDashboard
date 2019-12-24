@@ -8,16 +8,13 @@ export default function useNetworkTable(key: string, initalValue?: any) {
         NetworkTables.addKeyListener(`/SmartDashboard/${networkKey}`, newValue => {
             setValue(newValue)
         })
-    }, [])
+    }, [networkKey])
 
     useEffect(() => {
         if(value /*!= newValue*/) {
             NetworkTables.putValue(`/SmartDashboard/${networkKey}`, value)
         }
-        setTimeout(() => {
-            setValue(value + 1)
-        }, 100)
-    }, [value])
+    }, [value, networkKey])
 
     return [
         value,
