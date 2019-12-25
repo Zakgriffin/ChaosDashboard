@@ -65,7 +65,7 @@ export default function App() {
                         Teleop: [135, '#fece35'],
                         Endgame: [30, '#c91828']
                     }}
-                    x={54} y={4} width={15} height={15}
+                    x={54} y={4} width={9} height={15}
                 />
             </Draggable>
         </div>

@@ -27,13 +27,18 @@ export default function TimeMeter(props: IProps) {
     useEffect(() => {
         let total = 0
         let newStages = Object.entries(props.stages).map(([key, [time, color]]) => {
-            let newStage = {key, time: total, color}
             total += time
-            return newStage
+            return {key, time: total, color}
         })
-        setStages(newStages)
+        setStages(newStages.reverse())
         setTotalTime(total)
-    }, [])
+    }, [props.stages])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setCurrentTime(currentTime + 0.01)
+        }, 10)
+    }, [currentTime])
     
     if(!stages) return <div/>
 
@@ -44,14 +49,13 @@ export default function TimeMeter(props: IProps) {
 
     let stageGraphics = stages.map((stage) => {
         return <rect key={stage.key}
-            y={scaleTime(stage.time)}
+            height={scaleTime(stage.time)}
             width={width}
-            height='100'
             fill={stage.color}
         />
     })
     let breakLines = stages.map((stage) => {
-        if(stage.time == 0) return
+        if(stage.time === totalTime) return null
         let y = scaleTime(stage.time)
 
         return <line key={stage.key}
@@ -61,13 +65,17 @@ export default function TimeMeter(props: IProps) {
         />
     })
 
-    let label = ''
-    for(let {key, time} of stages) {
-        if(currentTime > time) label = key
-    }
+    let currentStage = stages
+        .slice()
+        .reverse()
+        .find(stage => currentTime < stage.time)
+
+    let date = new Date(0)
+    date.setSeconds(currentTime)
+    let timeString = date.toISOString().substr(14, 5);
 
     return (
-        <svg viewBox={`${width / 2 - 50} 0 100 100`} className='time-meter-graphic'>
+        <svg viewBox={`${width - 100} -5 110 110`} className='time-meter-graphic'>
             <mask id='levelMask'>
                 <rect rx={corner} ry={corner} width={width} height='100' fill='white'/>
                 <rect width='20' height={(currentTime / totalTime) * 100} fill='black'/>
@@ -81,14 +89,20 @@ export default function TimeMeter(props: IProps) {
                 {breakLines}
                 <rect rx={corner} ry={corner} width={width} height='100' fill='none'/>
             </g>
-            <text x='-5' y={scaleTime(currentTime)}
-                stroke='white'
-                strokeWidth='0.3'
-                textAnchor='end'
-                fontSize='6'
-            >
-                {label}
-            </text>
+            <g strokeWidth='0.3' textAnchor='end'>
+                <text x='-5' y={scaleTime(currentTime)}
+                    stroke='white'
+                    fontSize='6'
+                >
+                    {currentStage?.key}
+                </text>
+                <text x='-5' y={scaleTime(currentTime) + 5.5}
+                    stroke={currentStage?.color}
+                    fontSize='4'
+                >
+                    {timeString}
+                </text>
+            </g>
         </svg>
     )
 }
