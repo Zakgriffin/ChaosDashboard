@@ -7,6 +7,11 @@ interface IProps {
     variables: {
         active: string
     }
+
+    x?: number
+    y?: number
+    width?: number
+    height?: number
 }
 
 export default function Suction(props: IProps) {

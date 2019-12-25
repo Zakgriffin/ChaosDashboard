@@ -1,119 +1,94 @@
-import * as React from 'react'
+import React, {useState, useEffect} from 'react'
 import './TimeMeter.css'
-import NetworkTables from '../../network/networktables'
 
 interface IProps {
-    width?: any
-    stages?: {[stage: string]: [number, string]}
+    meterWidth?: number
+    stages: IStagesProps
+
+    x?: number
+    y?: number
+    width?: number
+    height?: number
 }
-interface IState {
-    currentTime: number
-    stages: {[stage: string]: [number, string]}
-    totalTime: number
-    size: {x: number, y: number}
-    width: number
+interface IStagesProps {
+    [stage: string]: [number, string]
+}
+interface IStage {
+    key: string
+    time: number
+    color: string
 }
 
-export default class TimeMeter extends React.Component<IProps, IState> {
-    stageBars: any
-    stageTimes: {[stage: string]: number}
+export default function TimeMeter(props: IProps) {
+    let [stages, setStages] = useState<IStage[]>(),
+        [totalTime, setTotalTime] = useState(),
+        [currentTime, setCurrentTime] = useState(0)
 
-    constructor(props: IProps) {
-        super(props)
-        
-        let stages = props.stages || {
-            Auto: [15, '#26b145'],
-            Teleop: [135, '#fece35'],
-            Endgame: [30, '#c91828']
-        }
-        this.state = {
-            currentTime: 0,
-            width: parseInt(props.width) || 85,
-            stages,
-            totalTime: Object.values(stages).reduce((a, b) => a + b[0], 0),
-            size: {x: 256, y: 820}
-        }
-        this.stageBars = {}
-        this.stageTimes = {}
-    }
-    componentDidMount = () => {
-        NetworkTables.addKeyListener('/SmartDashboard/timer', currentTime => {
-            this.setState({currentTime})
+    useEffect(() => {
+        let total = 0
+        let newStages = Object.entries(props.stages).map(([key, [time, color]]) => {
+            let newStage = {key, time: total, color}
+            total += time
+            return newStage
         })
-        /*
-        setInterval(() => {
-            this.setState({currentTime:this.state.currentTime + 0.1}) //Math.random() * this.state.size) % 360
-        }, 100)
-        */
+        setStages(newStages)
+        setTotalTime(total)
+    }, [])
+    
+    if(!stages) return <div/>
 
-        let curr = this.state.totalTime
-        Object.keys(this.state.stages).map(key => {
-            this.stageTimes[key] = curr
-            curr -= this.state.stages[key][0]
-            return undefined
-        })
-        
-        let timeMeterGraphic = document.getElementById('time-meter-graphic')
-        if(!timeMeterGraphic) return
-        for(let stage of Object.keys(this.state.stages)) {
-            let negPath = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-            negPath.setAttribute('d', this.pathString(this.stageTimes[stage], 'start'))
+    let width = 12
+    let corner = 6
+    
+    let scaleTime = (time: number) => (time / totalTime) * 100
 
-            timeMeterGraphic.appendChild(negPath)
-        }
+    let stageGraphics = stages.map((stage) => {
+        return <rect key={stage.key}
+            y={scaleTime(stage.time)}
+            width={width}
+            height='100'
+            fill={stage.color}
+        />
+    })
+    let breakLines = stages.map((stage) => {
+        if(stage.time == 0) return
+        let y = scaleTime(stage.time)
 
-        for(let [stage, val] of Object.entries(this.state.stages)) {
-            let color = val[1]
-            let posPath = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-            this.stageBars[stage] = posPath
-            posPath.setAttribute('fill', color)
-            posPath.setAttribute('d', this.pathString(0, 'start'))
+        return <line key={stage.key}
+            y1={y}
+            x2={width}
+            y2={y}
+        />
+    })
 
-            timeMeterGraphic.appendChild(posPath)
-        }
-
-        let hand = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-        this.stageBars.hand = hand
-        //timeMeterGraphic.appendChild(hand)
-    }
-    componentDidUpdate = () => {
-        //let dial = document.getElementById('dial')
-        //dial.style.transform = `rotate(${this.state.angle}deg)`
-        for(let [stage, time] of Object.entries(this.stageTimes)) {
-            let posPath = this.stageBars[stage]
-            posPath.setAttribute('d', this.pathString(time))
-        }
-        let hand = this.stageBars.hand
-        hand.setAttribute('d', this.pathString(undefined, 'hand'))
+    let label = ''
+    for(let {key, time} of stages) {
+        if(currentTime > time) label = key
     }
 
-    pathString = (time: any, type?: any) => {
-        let s = this.state
+    return (
+        <svg viewBox={`${width / 2 - 50} 0 100 100`} className='time-meter-graphic'>
+            <mask id='levelMask'>
+                <rect rx={corner} ry={corner} width={width} height='100' fill='white'/>
+                <rect width='20' height={(currentTime / totalTime) * 100} fill='black'/>
+            </mask>
 
-        let w = s.width
-        let x = s.size.x/2 - w/2
-        let y = s.size.y
-        let stretch
-        if(type === 'start') {
-            stretch = -time * (s.size.y / s.totalTime)
-        } else if(type === 'hand') {
-            let a = 50
-            return `m${x-(a-w)/2} ${(s.currentTime)* (s.size.y / s.totalTime)}l${a} 0`
-        } else {
-            stretch = -Math.min(s.totalTime - s.currentTime, time) * (s.size.y / s.totalTime)
-        }
-        return `m${x} ${y}l${w} 0l0 ${stretch}l-${w} 0z`
-    }
-
-    render() {
-        let s = this.state
-        return (
-            <div id = 'time-meter'>
-                <svg id = 'time-meter-graphic'
-                    viewBox={`0.0 0.0 ${s.size.x} ${s.size.y}`}
-                    xmlns='http://www.w3.org/2000/svg'>
-                </svg>
-            </div>
-        )
-    }
+            <g stroke='white' strokeWidth='1'>
+                <rect rx={corner} ry={corner} width={width} height='100' fill='black'/>
+                <g mask='url(#levelMask)'>
+                    {stageGraphics}
+                </g>
+                {breakLines}
+                <rect rx={corner} ry={corner} width={width} height='100' fill='none'/>
+            </g>
+            <text x='-5' y={scaleTime(currentTime)}
+                stroke='white'
+                strokeWidth='0.3'
+                textAnchor='end'
+                fontSize='6'
+            >
+                {label}
+            </text>
+        </svg>
+    )
 }

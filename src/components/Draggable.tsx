@@ -25,7 +25,6 @@ function Widget(props: any) {
     height *= gridScale
     let [menuSelected, setMenuSelected] = useState(false)
     let menu = menuSelected ? <div className='widgetMenu'>AHHH</div> : null
-    console.log(child.props)
     return (
         <>
             <Rnd className='draggable'

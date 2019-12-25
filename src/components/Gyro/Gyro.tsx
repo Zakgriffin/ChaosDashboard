@@ -7,6 +7,7 @@ interface IProps {
     variables: {
         angle: string
     }
+    
     x?: number
     y?: number
     width?: number

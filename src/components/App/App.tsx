@@ -40,7 +40,6 @@ export default function App() {
     //let login = !connected ? <Login tryLogin={tryLogin} connecting={connecting}/> : undefined
     return (
         <div id = 'App'>
-            <TimeMeter/>
             <Connection
                 teamNumber={teamNumber}
                 connected={connected}
@@ -52,15 +51,21 @@ export default function App() {
                     variables = {{
                         angle: 'rotation'
                     }}
-                    x={10}
-                    y={2}
-                    width={12}
-                    height={10}
+                    x={10} y={2} width={12} height={10}
                 />
                 <Suction
                     variables = {{
-                        active: 'succing'
+                        active: 'succ'
                     }}
+                    x={27} y={2} width={10} height={10}
+                />
+                <TimeMeter
+                    stages={{
+                        Auto: [15, '#26b145'],
+                        Teleop: [135, '#fece35'],
+                        Endgame: [30, '#c91828']
+                    }}
+                    x={54} y={4} width={15} height={15}
                 />
             </Draggable>
         </div>
