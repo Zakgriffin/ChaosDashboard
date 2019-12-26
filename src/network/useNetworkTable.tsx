@@ -1,17 +1,26 @@
 import {useState, useEffect} from 'react'
-import NetworkTables from './networktables'
+import NetworkTables from './NetworkTables'
 
 export default function useNetworkTable(key: string, initalValue?: any) {
     let [networkKey, setNetworkKey] = useState(key)
     let [value, setValue] = useState(initalValue)
-    useEffect(() => {
-        NetworkTables.addKeyListener(`/SmartDashboard/${networkKey}`, newValue => {
-            setValue(newValue)
-        })
-    }, [networkKey])
+    let [listenerID, setListenerID] = useState()
 
     useEffect(() => {
-        if(value /*!= newValue*/) {
+        if(listenerID) NetworkTables.removeKeyListener(networkKey, listenerID)
+
+        let id = NetworkTables.addKeyListener(`/SmartDashboard/${networkKey}`, newValue => {
+            setValue(newValue)
+        })
+        setListenerID(id)
+
+        return () => {
+            NetworkTables.removeKeyListener(networkKey, listenerID)
+        }
+    }, [networkKey, listenerID])
+
+    useEffect(() => {
+        if(value !== NetworkTables.getValue(networkKey)) {
             NetworkTables.putValue(`/SmartDashboard/${networkKey}`, value)
         }
     }, [value, networkKey])

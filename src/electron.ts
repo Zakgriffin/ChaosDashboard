@@ -1,5 +1,5 @@
 import {app, BrowserWindow} from 'electron'
-import NetworkTables from './network/networktables'
+import NetworkTables from './network/NetworkTables'
 
 app.on('ready', () => {
     let win = new BrowserWindow({

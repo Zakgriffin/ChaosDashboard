@@ -7,7 +7,7 @@ import Connection from '../Connection/Connection'
 import Simulation from '../Simulation/Simulation'
 //import Login from '../Login/Login'
 
-import NetworkTables from '../../network/networktables'
+import NetworkTables from '../../network/NetworkTables'
 import Draggable from '../Draggable'
 
 export default function App() {
@@ -51,7 +51,7 @@ export default function App() {
                     variables = {{
                         angle: 'rotation'
                     }}
-                    x={10} y={2} width={12} height={10}
+                    x={10} y={2} width={10} height={10}
                 />
                 <Suction
                     variables = {{

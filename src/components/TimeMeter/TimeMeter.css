@@ -11,7 +11,12 @@
     height: 100%;
     right: 0px;
 }
-
+/*
 .time-meter-graphic * {
-    /*transition: 0.3s;*/
+    transition: 0.3s;
+}
+*/
+
+.time-meter-time-label {
+    transition: 0.2s;
 }

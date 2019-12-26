@@ -36,7 +36,7 @@ export default function TimeMeter(props: IProps) {
 
     useEffect(() => {
         setTimeout(() => {
-            setCurrentTime(currentTime + 0.01)
+            setCurrentTime(currentTime + 0.2)
         }, 10)
     }, [currentTime])
     
@@ -68,11 +68,12 @@ export default function TimeMeter(props: IProps) {
     let currentStage = stages
         .slice()
         .reverse()
-        .find(stage => currentTime < stage.time)
+        .find(stage => currentTime < stage.time) || stages[0]
 
     let date = new Date(0)
-    date.setSeconds(currentTime)
-    let timeString = date.toISOString().substr(14, 5);
+    date.setSeconds(totalTime - currentTime)
+    //date.setSeconds(currentStage.time - currentTime)
+    let timeString = date.toISOString().substring(15, 19);
 
     return (
         <svg viewBox={`${width - 100} -5 110 110`} className='time-meter-graphic'>
@@ -89,20 +90,22 @@ export default function TimeMeter(props: IProps) {
                 {breakLines}
                 <rect rx={corner} ry={corner} width={width} height='100' fill='none'/>
             </g>
-            <g strokeWidth='0.3' textAnchor='end'>
-                <text x='-5' y={scaleTime(currentTime)}
-                    stroke='white'
-                    fontSize='6'
-                >
-                    {currentStage?.key}
-                </text>
-                <text x='-5' y={scaleTime(currentTime) + 5.5}
-                    stroke={currentStage?.color}
-                    fontSize='4'
-                >
-                    {timeString}
-                </text>
-            </g>
+            <text className='time-meter-stage-label'
+                x='-5' y={scaleTime(currentTime)}
+                fill='white'
+                fontSize='6'
+                textAnchor='end'
+            >
+                {currentStage?.key}
+            </text>
+            <text className='time-meter-time-label'
+                x='-5' y={scaleTime(currentTime) + 5.5}
+                fill={currentStage?.color}
+                fontSize='4'
+                textAnchor='end'
+            >
+                {timeString}
+            </text>
         </svg>
     )
 }

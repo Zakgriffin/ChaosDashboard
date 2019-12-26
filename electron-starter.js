@@ -1,14 +1,13 @@
 const { app, BrowserWindow } = require('electron')
 const url = require('url')
 const path = require('path')
-//const NetworkTables = require()
 
 let mainWindow
 
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
-        height: 532,
+        height: 522,
         resizable: false,
         //icon: null
     })
