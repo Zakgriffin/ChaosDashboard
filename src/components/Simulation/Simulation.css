@@ -1,7 +1,7 @@
-#simulation {
-    position: absolute;
-    width: 600px;
-    height: 300px;
+#simulation > canvas {
+    position: relative;
+    width: 200px;
+    height: 100px;
     left: 5px;
     bottom: 5px;
     transition: 0.2s;

@@ -5,13 +5,16 @@ const gridScale = 20
 
 
 export default function WidgetContainer(props: any) {
-    let [editable/*, setEditable*/] = useState(true)
+    let [editable/*, setEditable*/] = useState(false)
+    let [/*selectedWidget*/, setSelectedWidget] = useState() 
 
     return <>
         {
             React.Children.map(props.children, (child) => {
-                return <Widget child={child} editable={editable}/>
+                return <Widget child={child} editable={editable} func={setSelectedWidget}/>
             })
+        }
+        {//<div className='widgetMenu'>{selectedWidget && selectedWidget.props.x}</div>
         }
     </>
 }
@@ -23,8 +26,6 @@ function Widget(props: any) {
     y *=  gridScale
     width *= gridScale
     height *= gridScale
-    let [menuSelected, setMenuSelected] = useState(false)
-    let menu = menuSelected ? <div className='widgetMenu'>AHHH</div> : null
     return (
         <>
             <Rnd className='draggable'
@@ -45,11 +46,10 @@ function Widget(props: any) {
                     topLeft: editable,
                     topRight: editable
                 }}
-                onDoubleClick={() => setMenuSelected(!menuSelected)}
+                onDoubleClick={() => props.func(child)}
             >
                 {child}
             </Rnd>
-            {menu}
         </>
     )
 }

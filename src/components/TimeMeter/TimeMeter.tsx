@@ -14,7 +14,7 @@ interface IStagesProps {
     [stage: string]: [number, string]
 }
 interface IStage {
-    key: string
+    label: string
     time: number
     color: string
 }
@@ -26,9 +26,9 @@ export default function TimeMeter(props: IProps) {
 
     useEffect(() => {
         let total = 0
-        let newStages = Object.entries(props.stages).map(([key, [time, color]]) => {
+        let newStages = Object.entries(props.stages).map(([label, [time, color]]) => {
             total += time
-            return {key, time: total, color}
+            return {label, time: total, color}
         })
         setStages(newStages.reverse())
         setTotalTime(total)
@@ -48,7 +48,7 @@ export default function TimeMeter(props: IProps) {
     let scaleTime = (time: number) => (time / totalTime) * 100
 
     let stageGraphics = stages.map((stage) => {
-        return <rect key={stage.key}
+        return <rect key={stage.label}
             height={scaleTime(stage.time)}
             width={width}
             fill={stage.color}
@@ -58,7 +58,7 @@ export default function TimeMeter(props: IProps) {
         if(stage.time === totalTime) return null
         let y = scaleTime(stage.time)
 
-        return <line key={stage.key}
+        return <line key={stage.label}
             y1={y}
             x2={width}
             y2={y}
@@ -68,7 +68,7 @@ export default function TimeMeter(props: IProps) {
     let currentStage = stages
         .slice()
         .reverse()
-        .find(stage => currentTime < stage.time) || stages[0]
+        .find(stage => currentTime < stage.time)
 
     let date = new Date(0)
     date.setSeconds(totalTime - currentTime)
@@ -96,7 +96,7 @@ export default function TimeMeter(props: IProps) {
                 fontSize='6'
                 textAnchor='end'
             >
-                {currentStage?.key}
+                {currentStage?.label}
             </text>
             <text className='time-meter-time-label'
                 x='-5' y={scaleTime(currentTime) + 5.5}

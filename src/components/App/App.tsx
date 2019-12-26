@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import TimeMeter from '../TimeMeter/TimeMeter'
 import Suction from '../Suction/Suction'
@@ -15,7 +15,7 @@ export default function App() {
         //[connecting, setConnecting] = React.useState(false),
         [connected, setConnected] = React.useState(false)
 
-    React.useEffect(() => {
+    useEffect(() => {
         NetworkTables.addConnectionListener((connected) => {
             setConnected(connected)
         })
@@ -41,23 +41,25 @@ export default function App() {
     return (
         <div id = 'App'>
             <Connection
-                teamNumber={teamNumber}
-                connected={connected}
-                disconnect={disconnect}
+            teamNumber={teamNumber}
+            connected={connected}
+            disconnect={disconnect}
             />
-            <Simulation/>
             <Draggable>
+                <Simulation
+                    x={1} y={14} width={16} height={8}
+                />
                 <Gyro
                     variables = {{
                         angle: 'rotation'
                     }}
-                    x={10} y={2} width={10} height={10}
+                    x={10} y={2} width={9} height={9}
                 />
                 <Suction
                     variables = {{
                         active: 'succ'
                     }}
-                    x={27} y={2} width={10} height={10}
+                    x={27} y={2} width={9} height={9}
                 />
                 <TimeMeter
                     stages={{
