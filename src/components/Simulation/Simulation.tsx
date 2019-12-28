@@ -13,13 +13,13 @@ function Scene() {
     return <>
         <mesh visible position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry attach='geometry' args={[319, 649, 1]}/>
-            <meshBasicMaterial attach='material' color='yellow' transparent/>
+            <meshBasicMaterial attach='material' color='yellow'/>
         </mesh>
 
         <Suspense fallback={
             <mesh visible position={[0, 0, 0]} rotation={[0, 0, 0]}>
                 <sphereGeometry attach='geometry' args={[1, 16, 16]}/>
-                <meshBasicMaterial attach='material' color='hotpink' transparent/>
+                <meshBasicMaterial attach='material' color='hotpink'/>
             </mesh>
         }>
             <Asset url='../../../models/robot_model'/>
