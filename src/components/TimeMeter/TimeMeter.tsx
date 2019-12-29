@@ -96,11 +96,11 @@ export default function TimeMeter(props: IProps) {
                 fontSize='6'
                 textAnchor='end'
             >
-                {currentStage?.label}
+                {currentStage && currentStage.label}
             </text>
             <text className='time-meter-time-label'
                 x='-5' y={scaleTime(currentTime) + 5.5}
-                fill={currentStage?.color}
+                fill={currentStage && currentStage.color}
                 fontSize='4'
                 textAnchor='end'
             >
