@@ -1,42 +1,69 @@
-import * as React from 'react';
-import './Connection.css'
+import React, {useState} from 'react'
+import ConnectStatus from './ConnectStatus/ConnectStatus'
+import Login from './Login/Login'
 
-interface IProps {
-    connected: boolean
-    disconnect: () => void
-    teamNumber: number
-    teamColor?: string
-}
-interface IState {
-    teamColor: string
-}
+import NetworkTables from '../../network/NetworkTables'
 
-export default class Connection extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
-        super(props)
-        this.state = {
-            teamColor: props.teamColor || '#4a86e8',
+export default function Connection() {
+    const [teamNumber, setTeamNumber] = useState(),
+        [connected, setConnected] = useState(false),
+        [connecting, setConnecting] = useState(false)
+
+    const disconnect = () => {
+        setConnected(false)
+        NetworkTables.disconnect()
+    }
+
+    const tryLogin = (connectTeamNumber: number) => {
+        setConnecting(true)
+        NetworkTables.tryToConnect(`roborio-${connectTeamNumber}-frc.local`, (con) => {
+            setConnecting(false)
+            if(con) {
+                setConnected(true)
+                setTeamNumber(connectTeamNumber)
+            }
+        })
+    }
+
+    return <>
+        <ConnectStatus
+            teamNumber={teamNumber}
+            connected={connected}
+            disconnect={disconnect}
+        />
+        { connected ? null :
+        <Login
+            connecting={connecting}
+            tryLogin={tryLogin}
+        />
         }
-    }
-
-    render() {
-        let s = this.state
-        let p = this.props
-        let disconnectButton = p.connected ?
-            <button id='connection-disconnect' onClick={this.props.disconnect}>Exit</button> : undefined
-
-        return (
-            <div id='connection'>
-                <button id = 'connection-indicator'>
-                    <span style={{color: p.connected ? 'white' : 'red'}}>
-                        {p.connected ? 'Connected To ' : 'Robot Disconnected'}
-                    </span>
-                    <span style={{color: s.teamColor}}>
-                        {p.connected ? p.teamNumber : ''}
-                    </span>
-                </button>
-                {disconnectButton}
-            </div>
-        )
-    }
+    </>
 }
+/*
+let [teamNumber, setTeamNumber] = React.useState(0),
+//[connecting, setConnecting] = React.useState(false),
+[connected, setConnected] = React.useState(false)
+
+useEffect(() => {
+NetworkTables.addConnectionListener((connected) => {
+    setConnected(connected)
+})
+}, [])
+
+let tryLogin = (teamNumber: number) => {
+setConnecting(true)
+setTeamNumber(teamNumber)
+let address = `roborio-${teamNumber}-frc.local`
+NetworkTables.tryToConnect(address)
+setTimeout(() => {
+    setConnecting(false)
+}, 2000)
+}
+
+let disconnect = () => {
+setConnected(false)
+setTeamNumber(0)
+}
+
+//let login = !connected ? <Login tryLogin={tryLogin} connecting={connecting}/> : undefined
+*/

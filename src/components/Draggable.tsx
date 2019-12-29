@@ -47,6 +47,8 @@ function Widget(props: any) {
                     topRight: editable
                 }}
                 onDoubleClick={() => props.func(child)}
+
+                style={{border: editable ? '2px dashed #ffffff66' : ''}}
             >
                 {child}
             </Rnd>

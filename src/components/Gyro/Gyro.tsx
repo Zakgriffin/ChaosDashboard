@@ -37,7 +37,7 @@ export default function Gyro(props: IProps) {
                     textAnchor='middle'
                     fontSize='8'
                 >
-                    {angle}
+                    {Math.round(angle)}
                 </text>
             </svg>
         </div>

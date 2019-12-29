@@ -1,7 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import './TimeMeter.css'
+import useNetworkTable from '../../network/useNetworkTable'
 
 interface IProps {
+    variables: {
+        time: string
+    }
+
     meterWidth?: number
     stages: IStagesProps
 
@@ -20,10 +25,10 @@ interface IStage {
 }
 
 export default function TimeMeter(props: IProps) {
+    let [currentTime] = useNetworkTable(props.variables.time, 0)
     let [stages, setStages] = useState<IStage[]>(),
-        [totalTime, setTotalTime] = useState(),
-        [currentTime, setCurrentTime] = useState(0)
-
+        [totalTime, setTotalTime] = useState()
+    
     useEffect(() => {
         let total = 0
         let newStages = Object.entries(props.stages).map(([label, [time, color]]) => {
@@ -33,12 +38,6 @@ export default function TimeMeter(props: IProps) {
         setStages(newStages.reverse())
         setTotalTime(total)
     }, [props.stages])
-
-    useEffect(() => {
-        setTimeout(() => {
-            setCurrentTime(currentTime + 0.2)
-        }, 10)
-    }, [currentTime])
     
     if(!stages) return <div/>
 
@@ -64,6 +63,8 @@ export default function TimeMeter(props: IProps) {
             y2={y}
         />
     })
+
+    currentTime = Math.max(currentTime, 0)
 
     let currentStage = stages
         .slice()

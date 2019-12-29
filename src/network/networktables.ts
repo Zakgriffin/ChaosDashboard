@@ -19,7 +19,11 @@ let connectionListeners: ConnectionListener[] = [],
     globalListeners: MessageListener[] = [],
     keyListeners: {[key: string]: MessageListener[]} = {},
     robotAddress: string = ''
-
+/*
+setInterval(() => {
+    console.log(connectionListeners, globalListeners, keyListeners)
+}, 1000)
+*/
 const clientListener = client.addListener((key, value, valType, mesgType, id, flags) => {
     let data: IMessageData = {key, value, valType, mesgType, id, flags}
     globalListeners.map(listener => listener(data))
@@ -130,18 +134,18 @@ const NetworkTables = {
      * @param address Address to connect to
      * @param port Optional port
      */
-    tryToConnect(address: string, port?: number): void {
+    tryToConnect(address: string, onCon: (con: boolean) => void, port?: number): void {
         console.log(`Trying to connect to ${address}` + (port ? ':' + port : ''))
+
         let callback = (con: boolean, err: any) => {
+            onCon(con)
             connectionListeners.map(listenerCallback => listenerCallback(con))
-            if(err) console.log(err)
+            if(err) console.error(err)
             if(con) robotAddress = address
         }
-        if(port) {
-            client.start(callback, address, port)
-        } else {
-            client.start(callback, address)
-        }
+
+        if(port) client.start(callback, address, port)
+        else client.start(callback, address)
     },
 
     /**
