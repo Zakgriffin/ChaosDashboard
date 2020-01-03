@@ -5,7 +5,7 @@ const gridScale = 20
 
 
 export default function WidgetContainer(props: any) {
-    let [editable/*, setEditable*/] = useState(false)
+    let [editable/*, setEditable*/] = useState(true)
     let [/*selectedWidget*/, setSelectedWidget] = useState() 
 
     return <>
@@ -35,7 +35,7 @@ function Widget(props: any) {
                 minHeight={height}
                 minWidth={width}
                 bounds='window'
-                disableDragging={!editable}
+                disableDragging={!editable || child.props.fixed}
                 enableResizing={{
                     bottom: editable,
                     bottomLeft: editable,

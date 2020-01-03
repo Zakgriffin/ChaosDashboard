@@ -11,9 +11,6 @@ import Draggable from '../Draggable'
 export default function App() {
     return <div id = 'App'>
         <Draggable>
-            <Simulation
-                x={1} y={14} width={16} height={8}
-            />
             <Gyro
                 variables = {{
                     angle: 'gyro'
@@ -37,8 +34,12 @@ export default function App() {
                 }}
                 x={54} y={4} width={9} height={15}
             />
+            <Simulation
+                x={1} y={14} width={16} height={8} fixed
+                //x={1} y={1} width={40} height={20}
+            />
         </Draggable>
 
-        <Connection/>
+        
     </div>
 }
