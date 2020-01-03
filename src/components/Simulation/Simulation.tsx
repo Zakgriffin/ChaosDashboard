@@ -1,7 +1,7 @@
 import React, {useRef, Suspense} from 'react'
-import {extend, Canvas, useThree, /*useLoader*/} from 'react-three-fiber'
+import {extend, Canvas, useThree, useLoader} from 'react-three-fiber'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
-//import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
 import './Simulation.css'
 
 extend({ OrbitControls })
@@ -22,7 +22,7 @@ function Scene() {
                 <meshBasicMaterial attach='material' color='hotpink'/>
             </mesh>
         }>
-            <Asset url='../../../models/robot_model'/>
+            <Asset url='/models/field.glb'/>
         </Suspense>
 
         <orbitControls ref={orbit}
@@ -48,9 +48,8 @@ function Sim(props: any) {
 }
 
 function Asset({url}: any) {
-    //const gltf = useLoader(GLTFLoader, url)
-    //return <primitive object={gltf.scene}/>
-    return null
+    const gltf = useLoader(GLTFLoader, url)
+    return <primitive object={gltf.scene}/>
 }
   
 
