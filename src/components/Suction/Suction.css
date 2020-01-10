@@ -5,3 +5,7 @@
 .suction-indicator {
     transition: 0.3s;
 }
+
+.suction-lines path {
+    transition: 0.3s;
+}

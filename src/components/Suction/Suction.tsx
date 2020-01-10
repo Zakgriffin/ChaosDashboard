@@ -1,6 +1,7 @@
 import React from 'react';
 import './Suction.css'
 import useNetworkTable from '../../network/useNetworkTable';
+import {describeArc} from '../../functions'
 
 interface IProps {
     variables: {
@@ -25,16 +26,22 @@ export default function Suction(props: IProps) {
                     strokeLinejoin='round'
                     onClick={() => setActive(!active)}
                 >
-                    <rect x='-15' y='-10' width='60' height='20' rx='10' ry='10'/>
-                    <rect x='5' y='-6' width='25' height='12' rx='6' ry='6'/>
+                    <rect x='-20' y='-10' width='60' height='20' rx='10' ry='10'/>
+                    <rect x='0' y='-6' width='25' height='12' rx='6' ry='6'/>
                     <circle className='suction-indicator'
-                        x='5'
+                        cx='6'
                         r='6'
                         fill={active ? '#26b145' : '#c91828'}
-                        style={{transform: `translate(${active ? 10 : 0}px)`}}
+                        style={{transform: `translate(${active ? 13 : 0}px)`}}
                     />
-                    <line x1='-30' x2='-30' y1='10' y2='-10'/>
-                    <line x1='-35' x2='-35' y1='15' y2='-15'/>
+                    <path
+                        d={describeArc(-30, 0, 20, 0, 180, true)}
+                    />
+                    
+                    <g className='suction-lines' strokeLinecap='round' stroke={active ? 'white' : 'transparent'}>
+                        <path d={`M ${-36}, ${10 * active} L ${-36}, ${-10 * active}`}/>
+                        <path d={`M ${-42}, ${15 * active} L ${-42}, ${-15 * active}`}/>
+                    </g>
                 </g>
             </svg>
         </div>

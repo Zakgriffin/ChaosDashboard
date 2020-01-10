@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 
+import {describeArc, mod} from '../functions'
+
 interface IProps {
     x?: number
     y?: number
@@ -26,18 +28,13 @@ export default function ControlPanel(props: IProps) {
     }, [angle])
 
     let arcs = []
-    let outlines = []
     let lastAngle = 0
     let r = 35
     for(let i = 0; i < count; i++) {
-        let newAngle = 360 / count * (i + 1)
+        let newAngle = anglePer * (i + 1)
         arcs.push(<path
             d={describeArc(0, 0, r, lastAngle, newAngle, true)}
             fill={colors[i % colors.length]}
-        />)
-        outlines.push(<path
-            d={describeArc(0, 0, r, lastAngle, newAngle, true)}
-            fill='none'
             stroke='white'
             strokeWidth='2'
         />)
@@ -63,7 +60,6 @@ export default function ControlPanel(props: IProps) {
         */}
         <g style={{transform: `rotate(${angle}deg)`}}>
             {arcs}
-            {outlines}
         </g>
         <polygon
             points='3.5,45.5 -3.5,45.5 0,40'
@@ -78,37 +74,4 @@ export default function ControlPanel(props: IProps) {
             marker-end='url(#head)'
         />
     </svg>
-}
-
-
-//https://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle
-function describeArc(x: number, y: number, radius: number, startAngle: number, endAngle: number, pie: boolean){
-    function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number) {
-        var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0
-      
-        return {
-          x: centerX + (radius * Math.cos(angleInRadians)),
-          y: centerY + (radius * Math.sin(angleInRadians))
-        }
-    }
-
-    var start = polarToCartesian(x, y, radius, endAngle)
-    var end = polarToCartesian(x, y, radius, startAngle)
-
-    var largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1'
-
-    var d = pie ? [
-        'M', 0, 0,
-        'L', start.x, start.y, 
-        'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
-    ].join(' ') : [
-        'M', start.x, start.y,
-        'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
-    ].join(' ')
-
-    return d       
-}
-
-function mod(n1: number, n2: number) {
-    return ((n1%n2)+n2)%n2
 }
