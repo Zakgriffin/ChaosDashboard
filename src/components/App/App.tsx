@@ -8,9 +8,11 @@ import Connection from '../Connection/Connection'
 
 import Draggable from '../Draggable'
 import ControlPanel from '../ControlPanel'
+import RobotGraphic from '../RobotGraphic/RobotGraphic'
 
 export default function App() {
     return <div id = 'App'>
+        {/*
         <Draggable>
             <ControlPanel
                 x={10} y={12} width={9} height={9}
@@ -38,13 +40,16 @@ export default function App() {
                 }}
                 x={54} y={4} width={9} height={15}
             />
-            {/*
+            {
             <Simulation
                 x={1} y={14} width={16} height={8} fixed
                 //x={1} y={1} width={40} height={20}
             />
-            */}
+            }
         </Draggable>
-        
+        */}
+        <Draggable>
+            <RobotGraphic x={10} y={2} width={20} height={20}/>
+        </Draggable>
     </div>
 }
