@@ -17,20 +17,25 @@ function Scene() {
     const orbit = useRef<JSX.IntrinsicElements['orbitControls']>()
     const {camera, gl} = useThree()
 
-    const [leftWheelAngle] = useNetworkTable('leftWheelAngle', 0)
-    const [rightWheelAngle] = useNetworkTable('rightWheelAngle', 0)
+    //const [leftWheelAngle] = useNetworkTable('leftWheelAngle', 0)
+    //const [rightWheelAngle] = useNetworkTable('rightWheelAngle', 0)
+
+    const [wheelRots] = useNetworkTable('wheelRots', [0, 0])
+    const [leftWheelAngle, rightWheelAngle, timeFrom] = wheelRots
 
     const leftDistLast = useRef(0)
     const rightDistLast = useRef(0)
+    const lastTime = useRef(Date.now() / 1000)
 
     const [pos, setPos] = useState([0, -14, 150])
     const [rot, setRot] = useState([0, 0, 0])
 
-    const timeDelta = 0.1 // seconds
-    useInterval(() => {
-        const leftDist = -leftWheelAngle * 20
-        const rightDist = -rightWheelAngle * 20
+    useEffect(() => {
+        const time = timeFrom//Date.now() / 1000
+        const leftDist = -leftWheelAngle * 500
+        const rightDist = -rightWheelAngle * 500
 
+        const timeDelta = time - lastTime.current
         const leftChange = leftDist - leftDistLast.current
         const rightChange = rightDist - rightDistLast.current
         //                                         inches per timeDelta
@@ -46,7 +51,8 @@ function Scene() {
 
         leftDistLast.current = leftDist
         rightDistLast.current = rightDist
-    }, timeDelta * 1000)
+        lastTime.current = time
+    }, [wheelRots])
 
     useEffect(() => {
         camera.position.set(0, 100, 240)
@@ -55,6 +61,10 @@ function Scene() {
     }, [])
 
     return <>
+        <mesh onClick={() => {setPos([0, -14, 150])}} visible position={[50, 10, 100]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry attach='geometry' args={[20, 50, 20]}/>
+            <meshBasicMaterial attach='material' color='hotpink'/>
+        </mesh>
         <Suspense fallback={
             // field
             <mesh visible position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -124,7 +134,7 @@ function getTankChange(l: number, r: number, t: number): {changePos: number[], a
     let lrDif = l - r
     if(lrDif === 0) {
         // straight forward
-        return {changePos: [0, 0, l], angle: 0}
+        return {changePos: [0, 0, l*t], angle: 0}
     }
     let radiusLeft = (l * d) / lrDif
     let radiusRight = (r * d) / lrDif
@@ -152,21 +162,21 @@ function rotateAroundY(point: number[], angle: number): number[] {
 }
 
 function useInterval(callback: () => void, delay: number) {
-    const savedCallback = useRef(callback);
+    const savedCallback = useRef(callback)
   
     // Remember the latest callback.
     useEffect(() => {
-        savedCallback.current = callback;
-    }, [callback]);
+        savedCallback.current = callback
+    }, [callback])
   
     // Set up the interval.
     useEffect(() => {
         function tick() {
-            savedCallback.current();
+            savedCallback.current()
         }
         if(delay !== null) {
-            let id = setInterval(tick, delay);
-            return () => clearInterval(id);
+            let id = setInterval(tick, delay)
+            return () => clearInterval(id)
         }
-    }, [delay]);
+    }, [delay])
 }
