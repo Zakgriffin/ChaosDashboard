@@ -55,6 +55,6 @@ export default function App() {
                 x={1} y={1} width={40} height={20} fixed
             />
         </Draggable>
-        {/*<Connection/>*/}
+        <Connection/>
     </div>
 }

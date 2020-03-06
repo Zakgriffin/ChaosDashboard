@@ -15,7 +15,7 @@ interface IPos {
 }
 
 export default function RobotGraphic(props: IProps) {
-    const width = 30
+    const width = 40
     const height = 40
 
     return <svg viewBox={`0 0 ${width} ${height}`} height='100%'>
