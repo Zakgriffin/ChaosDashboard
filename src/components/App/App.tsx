@@ -50,11 +50,13 @@ export default function App() {
         */}
         <Draggable>
             <RobotGraphic x={42} y={1} width={20} height={20}/>
+            {/*
             <Simulation
                 //x={1} y={14} width={16} height={8} fixed
                 x={1} y={1} width={40} height={20} fixed
             />
+            */}
         </Draggable>
-        <Connection/>
+        {/*<Connection/>*/}
     </div>
 }

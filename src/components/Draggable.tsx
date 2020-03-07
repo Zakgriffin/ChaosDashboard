@@ -5,7 +5,7 @@ const gridScale = 20
 
 
 export default function WidgetContainer(props: any) {
-    let [editable/*, setEditable*/] = useState(true)
+    let [editable/*, setEditable*/] = useState(false)
     let [/*selectedWidget*/, setSelectedWidget] = useState() 
 
     return <>
@@ -48,7 +48,10 @@ function Widget(props: any) {
                 }}
                 onDoubleClick={() => props.func(child)}
 
-                style={{border: editable ? '2px dashed #ffffff66' : ''}}
+                style={{
+                    border: editable ? '2px dashed #ffffff66' : '',
+                    background: '#2e2e2e'
+                }}
             >
                 {child}
             </Rnd>
