@@ -20,8 +20,8 @@ function Scene() {
     //const [leftWheelAngle] = useNetworkTable('leftWheelAngle', 0)
     //const [rightWheelAngle] = useNetworkTable('rightWheelAngle', 0)
 
-    const [wheelRots] = useNetworkTable('wheelRots', [0, 0])
-    const [leftWheelAngle, rightWheelAngle, timeFrom] = wheelRots
+    const [wheelRots] = useNetworkTable('wheelRots', [0, 0, 0])
+    const [leftWheelAngle, rightWheelAngle, time] = wheelRots
 
     const leftDistLast = useRef(0)
     const rightDistLast = useRef(0)
@@ -31,9 +31,9 @@ function Scene() {
     const [rot, setRot] = useState([0, 0, 0])
 
     useEffect(() => {
-        const time = timeFrom//Date.now() / 1000
-        const leftDist = -leftWheelAngle * 500
-        const rightDist = -rightWheelAngle * 500
+        // rotations to inches
+        const leftDist = -leftWheelAngle * 100
+        const rightDist = -rightWheelAngle * 100
 
         const timeDelta = time - lastTime.current
         const leftChange = leftDist - leftDistLast.current
@@ -52,6 +52,7 @@ function Scene() {
         leftDistLast.current = leftDist
         rightDistLast.current = rightDist
         lastTime.current = time
+        console.log(pos)
     }, [wheelRots])
 
     useEffect(() => {
@@ -61,7 +62,7 @@ function Scene() {
     }, [])
 
     return <>
-        <mesh onClick={() => {setPos([0, -14, 150])}} visible position={[50, 10, 100]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh onClick={() => setPos([0, -14, 150])} visible position={[50, 10, 100]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry attach='geometry' args={[20, 50, 20]}/>
             <meshBasicMaterial attach='material' color='hotpink'/>
         </mesh>
@@ -82,8 +83,8 @@ function Scene() {
 
         <Suspense fallback={
             // robot
-            <mesh visible position={[0, 0, 0]} rotation={[0, 0, 0]}>
-                <sphereGeometry attach='geometry' args={[1, 16, 16]}/>
+            <mesh visible position={pos} rotation={rot}>
+                <boxGeometry attach='geometry' args={[20, 60, 20]}/>
                 <meshBasicMaterial attach='material' color='hotpink'/>
             </mesh>
         }>
