@@ -170,16 +170,20 @@ function Shooter({x, y, pivot}: {x: number, y: number, pivot: number}) {
     const [shooterVelocity] = useNetworkTable('shooterVelocity', 0)
     const [shooterActive] = useNetworkTable('shooterActive', false)
 
-    const percent = Math.min(100, -shooterVelocity / 14)
+    const percent = Math.min(100, Math.abs(shooterVelocity / 14 / 5))
     let meterColor = '#00b'//'#209'
-    let radius = 3.6
-    if(percent > 80) {
+    let radius = 4.2
+    if(percent > 50) {
         meterColor = 'green'
-        radius = 4
+        radius = 4.4
+    }
+    if(percent > 80) {
+        meterColor = '#fb0'
+        radius = 4.6
     }
     if(percent === 100) {
         meterColor = '#b00'
-        radius = 4.4
+        radius = 5
     }
 
     return <g style={move(x, y)}>
@@ -188,7 +192,7 @@ function Shooter({x, y, pivot}: {x: number, y: number, pivot: number}) {
             <g style={move(0, 2)}>
                 <rect className='beam' x={-0.5} y={-5.5} width={1} height={5} fill='gray'/>
                 <rect className='beam' x={-4} y={-0.5} width={8} height={1} fill='gray'/>
-                <g className='wheels' fill='#800' stroke={percent > 0 ? 'red' : 'none'} strokeWidth={0.2}>
+                <g className='wheels' fill='#800' stroke={percent > 0 ? meterColor : 'none'} strokeWidth={0.2} style={{transition:'stroke 0.3s'}}>
                     <rect x={3} y={-1.5} width={4} height={1} rx={0.4}/>
                     <rect x={3} y={0.5} width={4} height={1} rx={0.4}/>
                 </g>
@@ -198,10 +202,11 @@ function Shooter({x, y, pivot}: {x: number, y: number, pivot: number}) {
             </g>
         </g>
         <g visibility={percent > 0 ? 'visible' : 'hidden'}>
-            <circle cx={13} cy={-1} r={radius}/>
-            <path d={describeArc(13, -1, radius, 0, percent * 3.59999, true)}
+            <line x1={7.7} y1={1} x2={18} y2={-0.5} stroke={meterColor} strokeWidth={0.4} strokeLinecap='round' style={{transition:'stroke 0.3s'}}/>
+            <circle cx={18} cy={-0.5} r={radius} fill='#111'/>
+            <path d={describeArc(18, -0.5, radius, 0, percent * 3.59999, true)}
                 fill={meterColor} style={{transition:'fill 0.3s'}}/>
-            <text x={13} y={-0.2} fontSize={2.5} fontWeight={30} textAnchor='middle' fill='white'>
+            <text x={18} y={0.2} fontSize={2.5} fontWeight={30} textAnchor='middle' fill='white'>
                 {Math.floor(percent)}%
             </text>
         </g>

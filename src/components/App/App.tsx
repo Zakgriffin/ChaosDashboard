@@ -49,14 +49,25 @@ export default function App() {
         </Draggable>
         */}
         <Draggable>
-            <RobotGraphic x={42} y={1} width={20} height={20}/>
+            <RobotGraphic x={35} y={1} width={20} height={20}/>
             {/*
             <Simulation
                 //x={1} y={14} width={16} height={8} fixed
                 x={1} y={1} width={40} height={20} fixed
             />
             */}
+            <TimeMeter
+                variables = {{
+                    time: 'timer'
+                }}
+                stages={{
+                    Auto: [15, '#26b145'],
+                    Teleop: [135, '#fece35'],
+                    Endgame: [30, '#c91828']
+                }}
+                x={55.6} y={1} width={7} height={20}
+            />
         </Draggable>
-        {/*<Connection/>*/}
+        <Connection/>
     </div>
 }

@@ -41,8 +41,8 @@ export default function TimeMeter(props: IProps) {
     
     if(!stages) return <div/>
 
-    let width = 12
-    let corner = 6
+    let width = 8
+    let corner = width / 2
     
     let scaleTime = (time: number) => (time / totalTime) * 100
 
@@ -76,14 +76,13 @@ export default function TimeMeter(props: IProps) {
     //date.setSeconds(currentStage.time - currentTime)
     let timeString = date.toISOString().substring(15, 19);
 
-    return (
-        <svg viewBox={`${width - 100} -5 110 110`} className='time-meter-graphic'>
+    return <svg viewBox={`${width - 100} -7.5 105 115`} className='time-meter-graphic'>
             <mask id='levelMask'>
                 <rect rx={corner} ry={corner} width={width} height='100' fill='white'/>
                 <rect width='20' height={(currentTime / totalTime) * 100} fill='black'/>
             </mask>
 
-            <g stroke='white' strokeWidth='1'>
+            <g stroke='#666' strokeWidth='0.8'>
                 <rect rx={corner} ry={corner} width={width} height='100' fill='black'/>
                 <g mask='url(#levelMask)'>
                     {stageGraphics}
@@ -107,6 +106,5 @@ export default function TimeMeter(props: IProps) {
             >
                 {timeString}
             </text>
-        </svg>
-    )
+    </svg>
 }
