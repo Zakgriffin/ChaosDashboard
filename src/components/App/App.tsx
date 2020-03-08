@@ -11,43 +11,7 @@ import ControlPanel from '../ControlPanel'
 import RobotGraphic from '../RobotGraphic/RobotGraphic'
 
 export default function App() {
-    return <div id = 'App'>
-        {/*
-        <Draggable>
-            <ControlPanel
-                x={10} y={12} width={9} height={9}
-            />
-            <Gyro
-                variables = {{
-                    angle: 'gyro'
-                }}
-                x={10} y={2} width={9} height={9}
-            />
-            <Suction
-                variables = {{
-                    active: 'suction'
-                }}
-                x={27} y={2} width={9} height={9}
-            />
-            <TimeMeter
-                variables = {{
-                    time: 'timer'
-                }}
-                stages={{
-                    Auto: [15, '#26b145'],
-                    Teleop: [135, '#fece35'],
-                    Endgame: [30, '#c91828']
-                }}
-                x={54} y={4} width={9} height={15}
-            />
-            {
-            <Simulation
-                x={1} y={14} width={16} height={8} fixed
-                //x={1} y={1} width={40} height={20}
-            />
-            }
-        </Draggable>
-        */}
+    return <div className = 'App'>
         <Draggable>
             <RobotGraphic x={35} y={1} width={20} height={20}/>
             {/*
