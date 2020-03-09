@@ -37,7 +37,6 @@ function move(x: number, y: number) {
 function Bumper({x, y}: {x: number, y: number}) {
     const [bumperType, setBumperType] = useState(0)
     
-    console.log(bumperType)
     const colors = ['#900', '#00a', '#0006', '#0000']
     function inc() {
         setBumperType(bumperType < colors.length - 1 ? bumperType + 1 : 0)
