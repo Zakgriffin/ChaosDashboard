@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-import {describeArc, mod} from '../functions'
+import {describeArc, mod} from '../../functions'
 
 interface IProps {
     x?: number

@@ -1,0 +1,71 @@
+.connect-status {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*transform: translate(-50%);*/
+}
+
+.connect-status-info {
+    position: absolute;
+    width: 65%;
+    height: 30%;
+
+    font-size: 100%;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 45px;
+    border: 0;
+    border-radius: 8px;
+}
+.connect-status-info:focus {
+    outline: none;
+}
+
+.connect-status-state {
+    top: 15%;
+    right: 0%;
+}
+
+.connect-status-team-name {
+    bottom: 12%;
+    right: 0%;
+}
+
+.connect-status-disconnect {
+    position: absolute;
+    width: 90%;
+    height: 14%;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 60%;
+    border: 0;
+    border-radius: 4px;
+
+    transition: 0.2s;
+}
+.connect-status-disconnect:hover {
+    cursor: pointer;
+
+    /* COME BACK AND REMOVE COLORS */
+    background-color: #333333;
+    color: white;
+}
+.connect-status-disconnect:focus {
+    outline: none;
+}
+
+.connect-status-logo {
+    position: absolute;
+    width: 100%;
+    top: 5%;
+}
+
+.connect-status-left-items {
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    left: 2%;
+}

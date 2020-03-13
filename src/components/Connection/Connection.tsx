@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import ConnectStatus from './ConnectStatus/ConnectStatus'
+import ConnectStatus from '../ConnectStatus/ConnectStatus'
 import Login from './Login/Login'
 
 import NetworkTables from '../../network/NetworkTables'
@@ -27,9 +27,6 @@ export default function Connection() {
 
     return <>
         <ConnectStatus
-            teamNumber={teamNumber}
-            connected={connected}
-            disconnect={disconnect}
         />
         { connected ? null :
         <Login

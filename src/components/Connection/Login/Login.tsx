@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './Login.css'
-import Logo from '../../../Logo';
+import Logo from '../../../teamInfo/2458/Logo';
 
 interface IProps {
     tryLogin: (num: number) => void
