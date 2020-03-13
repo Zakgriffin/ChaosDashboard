@@ -1,13 +1,11 @@
 import React, {createContext, useReducer} from 'react'
-import fs from 'fs'
-
+import {ITeamInfo, getTeamInfo} from '../teamInfo/TeamInfo'
+getTeamInfo(2)
 interface IState {
     connected: boolean
     address: string
-    teamInfo: {
-        teamNumber: number
-        teamColor: string
-    }
+    connecting: boolean
+    teamInfo: ITeamInfo
 }
 
 interface IAction {
@@ -24,26 +22,36 @@ export const ConnectionContext = createContext({} as IContext)
 
 const reducer = (state: IState, action: IAction): IState => {
     switch(action.type) {
-        case 'CONNECTED':
-            return {...state, connected: true}
-        case 'DISCONNECTED':
-            return {...state,
-                connected: false,
-                address: ''
-            }
-        case 'CONNECTED_TO':
+        case 'CONNECTION_SUCCESS':
             if(!action.payload) return state
-            return {...state,
+            let {teamNumber, address} = action.payload
+            return {
                 connected: true,
-                address: action.payload
+                connecting: false,
+                address: address,
+                teamInfo: getTeamInfo(teamNumber)
             }
-        case 'SET_TEAM_NUMBER':
-            if(typeof action.payload !== 'number') return state
-            let teamNumber = action.payload
-            let teamInfoRaw = fs.readFileSync(`./src/teamInfo/${teamNumber}/teamInfo.json`)
-            let teamInfo = JSON.parse(teamInfoRaw.toString())
-            console.log(teamInfo)
-            return {... state, teamInfo}
+        case 'CONNECTION_FAIL':
+            return {
+                connected: false,
+                connecting: false,
+                address: '',
+                teamInfo: getTeamInfo(-1)
+            }
+        case 'DISCONNECT':
+            return {
+                connected: false,
+                connecting: state.connecting,
+                address: '',
+                teamInfo: getTeamInfo(-1)
+            }
+        case 'TRY_CONNECTION':
+            return {
+                connected: false,
+                connecting: true,
+                address: '',
+                teamInfo: getTeamInfo(-1)
+            }
         default:
             return state
     }
@@ -52,9 +60,11 @@ const reducer = (state: IState, action: IAction): IState => {
 const initialState = {
     connected: false,
     address: 'NONE',
+    connecting: false,
     teamInfo: {
-        teamNumber: -1,
-        teamColor: ''
+        number: -1,
+        color: '',
+        name: ''
     }
 }
 

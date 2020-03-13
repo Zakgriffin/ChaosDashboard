@@ -46,7 +46,7 @@ function Bumper({x, y}: {x: number, y: number}) {
     return <g style={move(x, y)}>
         <rect x={-15} y={-2.25} width={30} height={4.5} rx={1} fill={color} onClick={inc}/>
         {color !== '#0000' ? 
-            <text y={1.2} fontSize={4} fill='white'  pointerEvents='none' textAnchor='middle'>2458</text> : undefined
+            <text y={1.4} fontSize={4} fill='white'  pointerEvents='none' textAnchor='middle'>2458</text> : undefined
         }
     </g>
 }

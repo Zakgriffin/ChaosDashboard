@@ -9,6 +9,7 @@ import Test from '../Test'
 import ThemeContextProvider, { ThemeContext } from '../../contexts/ThemeContext'
 import ConnectStatus from '../ConnectStatus/ConnectStatus'
 import ConnectionContextProvider from '../../contexts/ConnectionContext'
+import ConnectionMaker from '../ConnectionMaker/ConnectionMaker'
 
 export default function App() {
     return <div className='App'>
@@ -79,6 +80,9 @@ export default function App() {
                 </Widget>
             </WidgetContainer>
         </ThemeContextProvider>
-        {/*<Connection/>*/}
+        
+        <ConnectionContextProvider>
+            <ConnectionMaker/>
+        </ConnectionContextProvider>
     </div>
 }

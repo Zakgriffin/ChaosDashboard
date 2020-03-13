@@ -4,6 +4,11 @@ interface IState {
     background: string
     widget: string
     text: string
+    trafficColors: {
+        red: string
+        yellow: string
+        green: string
+    }
 }
 
 interface IAction {
@@ -20,12 +25,22 @@ const themes: {[key: string]: IState} = {
     dark: {
         background: '#222',
         widget: '#2e2e2e',
-        text: '#fff'
+        text: '#fff',
+        trafficColors: {
+            red: '#c91828',
+            yellow: '#fece35',
+            green: '#26b145'
+        }
     },
     light: {
         background: 'eee',
         widget: 'ddd',
-        text: '#222'
+        text: '#222',
+        trafficColors: {
+            red: '#c91828',
+            yellow: '#fece35',
+            green: '#26b145'
+        }
     }
 }
 

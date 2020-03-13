@@ -41,6 +41,7 @@
     transform: translateX(-50%);
 
     font-size: 60%;
+    font-weight: bold;
     border: 0;
     border-radius: 4px;
 
@@ -48,10 +49,6 @@
 }
 .connect-status-disconnect:hover {
     cursor: pointer;
-
-    /* COME BACK AND REMOVE COLORS */
-    background-color: #333333;
-    color: white;
 }
 .connect-status-disconnect:focus {
     outline: none;
