@@ -33,8 +33,8 @@ const themes: {[key: string]: IState} = {
         }
     },
     light: {
-        background: 'eee',
-        widget: 'ddd',
+        background: '#ddd',
+        widget: '#ccc',
         text: '#222',
         trafficColors: {
             red: '#c91828',

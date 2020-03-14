@@ -10,7 +10,7 @@ export default function ConnectStatus() {
     const {connection, dispatchConnection} = useContext(ConnectionContext)
     const {connected, teamInfo} = connection
 
-    console.log(connection)
+    const Logo = teamInfo.logo
 
     return <div className='connect-status'>
         {/* state */}
@@ -41,8 +41,9 @@ export default function ConnectStatus() {
                 }}>
                 {connected ? 'Disconnect' : 'Connect'}
             </button>
-
-            {/* <Logo className='connect-status-logo'/> */}
+            <div className='connect-status-logo'>   
+                <Logo/>
+            </div>
         </div>
     </div>
 }

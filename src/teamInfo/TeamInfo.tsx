@@ -15,7 +15,8 @@ const defaultTeamInfo: ITeamInfo = {
     color: 'white',
     name: 'None',
     logo: () => <svg viewBox='0 0 100 100'>
-        <circle cx={50} cy={50} r={50} fill='white'/>
+        <circle cx={50} cy={50} r={50} fill='#111'/>
+        <text x={50} y={50} fill='white' alignmentBaseline='central' textAnchor='middle' fontSize={75}>?</text>
     </svg>
 }
 

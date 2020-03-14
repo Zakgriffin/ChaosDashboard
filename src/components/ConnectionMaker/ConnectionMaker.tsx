@@ -19,7 +19,8 @@ export default function ConnectionMaker() {
             if(con) {
                 dispatchConnection({type: 'CONNECTION_SUCCESS', payload: {address, teamNumber}})
             } else {
-                dispatchConnection({type: 'CONNECTION_FAIL'})
+                //dispatchConnection({type: 'CONNECTION_FAIL'})
+                dispatchConnection({type: 'CONNECTION_SUCCESS', payload: {address, teamNumber}})
             }
         })
     }
@@ -47,9 +48,11 @@ export default function ConnectionMaker() {
     let teamInfo = getTeamInfo(parseInt(teamNumberField))
     let Logo = teamInfo.logo
     
-    return connected ? null : <div id='blur-container'>
+    return connected ? null : <div className='connection-maker-container' style={{
+        backgroundColor: connected ? '' : '#0006'
+    }}>
         <Logo/>
-        <input id='team-number-input'
+        <input className='team-number-input'
             type='text'
             onChange={handleChange}
             value={teamNumberField}
@@ -57,7 +60,7 @@ export default function ConnectionMaker() {
             style={{
                 color: teamInfo.color
             }}/>
-        <button id = 'login-connect'
+        <button className='login-connect'
             style={{opacity: teamNumberField.length > 0 ? 1 : 0}}
             onClick={handleClickConnect}
         >
