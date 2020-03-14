@@ -14,6 +14,7 @@ import ConnectionMaker from '../ConnectionMaker/ConnectionMaker'
 export default function App() {
     return <div className='App'>
         <ThemeContextProvider>
+        <ConnectionContextProvider>
             <WidgetContainer>
                 <Widget x={6} y={2} width={6} height={6}>
                     <RobotGraphic/>
@@ -74,15 +75,11 @@ export default function App() {
                 </Widget>
 
                 <Widget x={0} y={0} width={4} height={2} backColor={false}>
-                    <ConnectionContextProvider>
-                        <ConnectStatus/>
-                    </ConnectionContextProvider>
+                    <ConnectStatus/>
                 </Widget>
             </WidgetContainer>
-        </ThemeContextProvider>
-        
-        <ConnectionContextProvider>
             <ConnectionMaker/>
         </ConnectionContextProvider>
+        </ThemeContextProvider>
     </div>
 }

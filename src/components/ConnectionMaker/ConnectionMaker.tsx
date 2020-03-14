@@ -11,16 +11,13 @@ export default function ConnectionMaker() {
     const {connection, dispatchConnection} = useContext(ConnectionContext)
     const {connected, connecting} = connection
 
-    const disconnect = () => {
-        dispatchConnection({type: 'DISCONNECT'})
-        NetworkTables.disconnect()
-    }
-
-    const tryLogin = (connectTeamNumber: number) => {
+    const tryLogin = (teamNumber: number) => {
+        if(connecting || typeof teamNumber !== 'number') return
         dispatchConnection({type: 'TRY_CONNECTION'})
-        NetworkTables.tryToConnect(`roborio-${connectTeamNumber}-frc.local`, (con) => {
+        let address = `roborio-${teamNumber}-frc.local`
+        NetworkTables.tryToConnect(address, (con) => {
             if(con) {
-                dispatchConnection({type: 'CONNECTION_SUCCESS', payload: connectTeamNumber})
+                dispatchConnection({type: 'CONNECTION_SUCCESS', payload: {address, teamNumber}})
             } else {
                 dispatchConnection({type: 'CONNECTION_FAIL'})
             }

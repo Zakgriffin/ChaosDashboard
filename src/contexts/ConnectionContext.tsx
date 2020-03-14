@@ -1,5 +1,6 @@
 import React, {createContext, useReducer} from 'react'
 import {ITeamInfo, getTeamInfo} from '../teamInfo/TeamInfo'
+import NetworkTables from '../network/NetworkTables'
 getTeamInfo(2)
 interface IState {
     connected: boolean
@@ -39,6 +40,7 @@ const reducer = (state: IState, action: IAction): IState => {
                 teamInfo: getTeamInfo(-1)
             }
         case 'DISCONNECT':
+            NetworkTables.disconnect()
             return {
                 connected: false,
                 connecting: state.connecting,

@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import './ConnectStatus.css'
 import {ThemeContext} from '../../contexts/ThemeContext'
 import {ConnectionContext} from '../../contexts/ConnectionContext'
-import {ReactComponent as Logo} from '../../teamInfo/2458/Logo.svg';
 
 export default function ConnectStatus() {
     const {theme} = useContext(ThemeContext)
@@ -10,6 +9,8 @@ export default function ConnectStatus() {
 
     const {connection, dispatchConnection} = useContext(ConnectionContext)
     const {connected, teamInfo} = connection
+
+    console.log(connection)
 
     return <div className='connect-status'>
         {/* state */}
@@ -36,9 +37,8 @@ export default function ConnectStatus() {
                 color: connected ? 'red' : trafficColors.green
             }}
                 onClick={() => {
-                    dispatchConnection({type: 'CONNECTED'})
-                    dispatchConnection({type: 'SET_TEAM_NUMBER', payload: 2458})}
-                }>
+                    if(connected) dispatchConnection({type: 'DISCONNECT'})
+                }}>
                 {connected ? 'Disconnect' : 'Connect'}
             </button>
 
