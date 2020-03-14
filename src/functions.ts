@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 //https://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle
 export function describeArc(x: number, y: number, radius: number, startAngle: number, endAngle: number, pie: boolean){
     function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number) {
@@ -29,4 +31,24 @@ export function describeArc(x: number, y: number, radius: number, startAngle: nu
 
 export function mod(n1: number, n2: number) {
     return ((n1%n2)+n2)%n2
+}
+
+export function useInterval(callback: () => any, delay: number) {
+    const savedCallback = useRef(callback)
+
+    // Remember the latest callback.
+    useEffect(() => {
+        savedCallback.current = callback
+    }, [callback])
+
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current()
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay)
+            return () => clearInterval(id)
+        }
+    }, [delay])
 }

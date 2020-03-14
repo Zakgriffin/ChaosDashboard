@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 
-import {describeArc, mod} from '../../functions'
+import {describeArc, mod, useInterval} from '../../functions'
 import { ThemeContext } from '../../contexts/ThemeContext'
 
 interface IProps {
@@ -25,9 +25,9 @@ export default function ControlPanel(props: IProps) {
     let anglePer = 360 / count
     let currentColor = colors[colors.length - 1 - mod((Math.floor(angle / anglePer)), colors.length)]
 
-    useEffect(() => {
-        setTimeout(() => setAngle(angle - 1), 10)
-    }, [angle])
+    useInterval(() => {
+        setAngle(angle - 1)
+    }, 10)
 
     let arcs = []
     let lastAngle = 0
@@ -37,8 +37,9 @@ export default function ControlPanel(props: IProps) {
         arcs.push(<path
             d={describeArc(0, 0, r, lastAngle, newAngle, true)}
             fill={colors[i % colors.length]}
-            stroke='white'
+            stroke={theme.common.strokeColor}
             strokeWidth={theme.common.strokeWeight}
+            key={i}
         />)
         lastAngle = newAngle
     }
@@ -67,7 +68,7 @@ export default function ControlPanel(props: IProps) {
             points='3.5,45.5 -3.5,45.5 0,40'
             fill={currentColor}
             stroke='white'
-            strokeWidth={theme.common.strokeWeight}
+            strokeWidth={theme.common.strokeWeight * 0.75}
         />
         {/* <path d={describeArc(0, 0, 42, -25 - angle / 20, 25 + angle / 20, false)}
             stroke='white'

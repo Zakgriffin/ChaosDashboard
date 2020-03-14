@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react'
-import './TimeMeter.css'
+import React, {useState, useEffect, useContext} from 'react'
 import useNetworkTable from '../../network/useNetworkTable'
+import { ThemeContext } from '../../contexts/ThemeContext'
+import { useInterval } from '../../functions'
 
 interface IProps {
     variables: {
@@ -8,12 +9,7 @@ interface IProps {
     }
 
     meterWidth?: number
-    stages: IStagesProps
-
-    x?: number
-    y?: number
-    width?: number
-    height?: number
+    stages?: IStagesProps
 }
 interface IStagesProps {
     [stage: string]: [number, string]
@@ -25,13 +21,25 @@ interface IStage {
 }
 
 export default function TimeMeter(props: IProps) {
-    let [currentTime] = useNetworkTable(props.variables.time, 0)
+    const {theme} = useContext(ThemeContext)
+
+    let [currentTime, setCurrentTime] = useState(0)//useNetworkTable(props.variables.time, 0)
     let [stages, setStages] = useState<IStage[]>(),
         [totalTime, setTotalTime] = useState(0)
+
+    useInterval(() => {
+        setCurrentTime(currentTime + 0.01)
+    }, 10)
     
     useEffect(() => {
+        const preStages = props.stages || {
+            Auto: [15, '#26b145'],
+            Teleop: [135, '#fece35'],
+            Endgame: [30, '#c91828']
+        }
+
         let total = 0
-        let newStages = Object.entries(props.stages).map(([label, [time, color]]) => {
+        let newStages = Object.entries(preStages).map(([label, [time, color]]) => {
             total += time
             return {label, time: total, color}
         })
@@ -39,21 +47,22 @@ export default function TimeMeter(props: IProps) {
         setTotalTime(total)
     }, [props.stages])
     
-    if(!stages) return <div/>
+    if(!stages) return <></>
 
-    let width = 8
-    let corner = width / 2
+    const width = 15
+    const corner = width / 2
     
-    let scaleTime = (time: number) => (time / totalTime) * 100
+    let scale = 100 * 1.7
+    let scaleTime = (time: number) => (time / totalTime) * scale
 
-    let stageGraphics = stages.map((stage) => {
+    let stageGraphics = stages.map(stage => {
         return <rect key={stage.label}
             height={scaleTime(stage.time)}
             width={width}
             fill={stage.color}
         />
     })
-    let breakLines = stages.map((stage) => {
+    let breakLines = stages.map(stage => {
         if(stage.time === totalTime) return null
         let y = scaleTime(stage.time)
 
@@ -64,47 +73,53 @@ export default function TimeMeter(props: IProps) {
         />
     })
 
-    currentTime = Math.max(currentTime, 0)
+    currentTime = Math.min(currentTime, totalTime)
 
     let currentStage = stages
         .slice()
         .reverse()
-        .find(stage => currentTime < stage.time)
+        .find(stage => currentTime <= stage.time)
 
     let date = new Date(0)
     date.setSeconds(totalTime - currentTime)
-    //date.setSeconds(currentStage.time - currentTime)
+    //date.setSeconds(currentStage.time - time)
     let timeString = date.toISOString().substring(15, 19);
 
-    return <svg viewBox={`${width - 100} -7.5 105 115`} className='time-meter-graphic'>
-            <mask id='levelMask'>
-                <rect rx={corner} ry={corner} width={width} height='100' fill='white'/>
-                <rect width='20' height={(currentTime / totalTime) * 100} fill='black'/>
-            </mask>
+    let labelHeight = Math.min(currentTime, totalTime - 10)
 
-            <g stroke='#666' strokeWidth='0.8'>
-                <rect rx={corner} ry={corner} width={width} height='100' fill='black'/>
+    return <svg viewBox='0 0 100 200' className='time-meter-graphic'>
+        <g style={{height:'100%', transform: 'translate(60px, 20px)'}}>
+            <mask id='levelMask'>
+                <rect rx={corner} width={width} height={scale} fill='white'/>
+                <rect width={20} height={currentTime} fill='black'/>
+            </mask>
+            {/* graphic */}
+            <g stroke={theme.common.strokeColor} strokeWidth={theme.common.strokeWeight}>
+                <rect rx={corner} width={width} height={scale} fill='black'/>
                 <g mask='url(#levelMask)'>
                     {stageGraphics}
                 </g>
                 {breakLines}
-                <rect rx={corner} ry={corner} width={width} height='100' fill='none'/>
+                <rect rx={corner} width={width} height={scale} fill='none'/>
             </g>
+            {/* labels */}
             <text className='time-meter-stage-label'
-                x='-5' y={scaleTime(currentTime)}
+                x={-5} y={labelHeight}
                 fill='white'
-                fontSize='6'
+                fontSize={10}
                 textAnchor='end'
             >
                 {currentStage && currentStage.label}
             </text>
             <text className='time-meter-time-label'
-                x='-5' y={scaleTime(currentTime) + 5.5}
+                x={-5} y={labelHeight + 10}
                 fill={currentStage && currentStage.color}
-                fontSize='4'
+                fontSize={7}
                 textAnchor='end'
+                style={{transition: '0.3s'}}
             >
                 {timeString}
             </text>
+        </g>
     </svg>
 }

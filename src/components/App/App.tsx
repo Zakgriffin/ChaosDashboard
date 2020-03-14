@@ -23,16 +23,7 @@ export default function App() {
                 </Widget>
 
                 <Widget name='Match Time' x={14} y={0} width={2} height={4}>
-                    <TimeMeter
-                        variables = {{
-                            time: 'timer'
-                        }}
-                        stages={{
-                            Auto: [15, '#26b145'],
-                            Teleop: [135, '#fece35'],
-                            Endgame: [30, '#c91828']
-                        }}
-                    />
+                    <TimeMeter variables = {{time: 'timer'}}/>
                 </Widget>
 
                 <Widget name='Camera' x={0} y={2} width={4} height={3}>

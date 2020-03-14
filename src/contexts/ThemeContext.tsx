@@ -20,6 +20,7 @@ interface IKeyColorSet {
 
 interface ICommon {
     strokeWeight: number
+    strokeColor: string
 }
 
 interface IAction {
@@ -55,7 +56,8 @@ const keyColorSets: {[key: string]: IKeyColorSet} = {
 
 const commons: {[key: string]: ICommon} = {
     generic: {
-        strokeWeight: 1.5
+        strokeWeight: 2,
+        strokeColor: 'white'
     }
 }
 

@@ -1,8 +1,7 @@
 import React, {useState, useContext} from 'react'
 import useNetworkTable from '../../network/useNetworkTable'
 import {describeArc} from '../../functions'
-import { getTeamInfo } from '../../teamInfo/TeamInfo'
-import { ConnectionContext } from '../../contexts/ConnectionContext'
+import {ConnectionContext} from '../../contexts/ConnectionContext'
 
 interface IProps {
     x?: number
