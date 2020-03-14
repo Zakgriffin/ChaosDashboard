@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default (props: any) => {
-    return <svg className={props.className} version='1.1' viewBox='0.0 0.0 960.0 960.0' fill='none' stroke='none' strokeLinecap='square' strokeMiterlimit='10'>
+export default function() {
+    return <svg version='1.1' viewBox='0.0 0.0 960.0 960.0' fill='none' stroke='none' strokeLinecap='square' strokeMiterlimit='10'>
         <clipPath id='p.0'>
             <path d='m0 0l960.0 0l0 960.0l-960.0 0l0 -960.0z' clipRule='nonzero'/>
         </clipPath>

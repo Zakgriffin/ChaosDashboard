@@ -3,7 +3,7 @@ import React, {useState, useContext} from 'react'
 import {ConnectionContext} from '../../contexts/ConnectionContext'
 
 import NetworkTables from '../../network/NetworkTables'
-import Logo from '../../teamInfo/2458/Logo'
+// import Logo from '../../teamInfo/2458/Logo'
 import './ConnectionMaker.css'
 import {getTeamInfo} from '../../teamInfo/TeamInfo'
 
@@ -47,18 +47,21 @@ export default function ConnectionMaker() {
         }
     }
 
-    return <div id='blur-container'>
-        <Logo id='logo'/>
+    let teamInfo = getTeamInfo(parseInt(teamNumberField))
+    let Logo = teamInfo.logo
+    
+    return connected ? null : <div id='blur-container'>
+        <Logo/>
         <input id='team-number-input'
             type='text'
             onChange={handleChange}
             value={teamNumberField}
             onKeyDown={handleKeyDown}
             style={{
-                color: getTeamInfo(parseInt(teamNumberField)).color
+                color: teamInfo.color
             }}/>
         <button id = 'login-connect'
-            style={{opacity: teamNumberField.length === 4 ? 1 : 0}}
+            style={{opacity: teamNumberField.length > 0 ? 1 : 0}}
             onClick={handleClickConnect}
         >
             {connecting ? 'Connecting' : 'Connect'}

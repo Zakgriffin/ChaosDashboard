@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import './ConnectStatus.css'
 import {ThemeContext} from '../../contexts/ThemeContext'
 import {ConnectionContext} from '../../contexts/ConnectionContext'
-import Logo from '../../teamInfo/2458/Logo';
+import {ReactComponent as Logo} from '../../teamInfo/2458/Logo.svg';
 
 export default function ConnectStatus() {
     const {theme} = useContext(ThemeContext)
@@ -42,7 +42,7 @@ export default function ConnectStatus() {
                 {connected ? 'Disconnect' : 'Connect'}
             </button>
 
-            <Logo className='connect-status-logo'/>
+            {/* <Logo className='connect-status-logo'/> */}
         </div>
     </div>
 }

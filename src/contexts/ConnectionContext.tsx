@@ -61,11 +61,7 @@ const initialState = {
     connected: false,
     address: 'NONE',
     connecting: false,
-    teamInfo: {
-        number: -1,
-        color: '',
-        name: ''
-    }
+    teamInfo: getTeamInfo(-1)
 }
 
 export default function ConnectionContextProvider(props: {children: any}) {
