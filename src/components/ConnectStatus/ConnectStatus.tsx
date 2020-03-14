@@ -5,7 +5,6 @@ import {ConnectionContext} from '../../contexts/ConnectionContext'
 
 export default function ConnectStatus() {
     const {theme} = useContext(ThemeContext)
-    const {widget, text, trafficColors} = theme
 
     const {connection, dispatchConnection} = useContext(ConnectionContext)
     const {connected, teamInfo} = connection
@@ -15,9 +14,9 @@ export default function ConnectStatus() {
     return <div className='connect-status'>
         {/* state */}
         <div className='connect-status-info connect-status-state'
-            style={{background: widget}}
+            style={{background: theme.tone.widget}}
         >
-            <span style={{color: connected ? text : 'red'}}>
+            <span style={{color: connected ? theme.tone.text : 'red'}}>
                 {connected ? 'Connected To ' : 'Disconnected'}
             </span>
             <span style={{color: teamInfo.color}}>
@@ -26,15 +25,15 @@ export default function ConnectStatus() {
         </div>
         {/* team name */}
         <div className='connect-status-info connect-status-team-name'
-            style={{background: widget, color: teamInfo.color}}
+            style={{background: theme.tone.widget, color: teamInfo.color}}
         >
             {connected ? teamInfo.name : 'No Team Set'}
         </div>
         {/* logo and disconnect */}
         <div className='connect-status-left-items'>
             <button className='connect-status-disconnect' style={{
-                background: widget,
-                color: connected ? 'red' : trafficColors.green
+                background: theme.tone.widget,
+                color: connected ? 'red' : theme.keyColorSet.high
             }}
                 onClick={() => {
                     if(connected) dispatchConnection({type: 'DISCONNECT'})

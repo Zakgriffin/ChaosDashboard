@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 
 import {describeArc, mod} from '../../functions'
+import { ThemeContext } from '../../contexts/ThemeContext'
 
 interface IProps {
     x?: number
@@ -17,6 +18,7 @@ const colors = [
 ]
 
 export default function ControlPanel(props: IProps) {
+    const {theme} = useContext(ThemeContext)
     const [angle, setAngle] = useState(0)
 
     let count = 8
@@ -36,7 +38,7 @@ export default function ControlPanel(props: IProps) {
             d={describeArc(0, 0, r, lastAngle, newAngle, true)}
             fill={colors[i % colors.length]}
             stroke='white'
-            strokeWidth='2'
+            strokeWidth={theme.common.strokeWeight}
         />)
         lastAngle = newAngle
     }
@@ -65,13 +67,13 @@ export default function ControlPanel(props: IProps) {
             points='3.5,45.5 -3.5,45.5 0,40'
             fill={currentColor}
             stroke='white'
-            strokeWidth='1.5'
+            strokeWidth={theme.common.strokeWeight}
         />
-        <path d={describeArc(0, 0, 42, -25 - angle / 20, 25 + angle / 20, false)}
+        {/* <path d={describeArc(0, 0, 42, -25 - angle / 20, 25 + angle / 20, false)}
             stroke='white'
             strokeWidth='2'
             fill='none'
             marker-end='url(#head)'
-        />
+        /> */}
     </svg>
 }

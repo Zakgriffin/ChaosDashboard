@@ -1,19 +1,30 @@
 import React, {createContext, useReducer} from 'react'
 
 interface IState {
+    tone: ITone
+    keyColorSet: IKeyColorSet
+    common: ICommon
+}
+
+interface ITone {
     background: string
     widget: string
     text: string
-    trafficColors: {
-        red: string
-        yellow: string
-        green: string
-    }
+}
+
+interface IKeyColorSet {
+    low: string
+    medium: string
+    high: string
+}
+
+interface ICommon {
+    strokeWeight: number
 }
 
 interface IAction {
     type: string
-    themeName?: string
+    payload?: any
 }
 
 interface IContext {
@@ -21,26 +32,30 @@ interface IContext {
     dispatchTheme: (action: IAction) => void
 }
 
-const themes: {[key: string]: IState} = {
+const tones: {[key: string]: ITone} = {
     dark: {
         background: '#222',
         widget: '#2e2e2e',
         text: '#fff',
-        trafficColors: {
-            red: '#c91828',
-            yellow: '#fece35',
-            green: '#26b145'
-        }
     },
     light: {
         background: '#ddd',
         widget: '#ccc',
         text: '#222',
-        trafficColors: {
-            red: '#c91828',
-            yellow: '#fece35',
-            green: '#26b145'
-        }
+    }
+}
+
+const keyColorSets: {[key: string]: IKeyColorSet} = {
+    ryg: {
+        low: '#c91828',
+        medium: '#fece35',
+        high: '#26b145'
+    }
+}
+
+const commons: {[key: string]: ICommon} = {
+    generic: {
+        strokeWeight: 1.5
     }
 }
 
@@ -49,14 +64,22 @@ export const ThemeContext = createContext({} as IContext)
 const reducer = (state: IState, action: IAction): IState => {
     switch(action.type) {
         case 'SET_THEME':
-            if(!action.themeName) return state
-            return themes[action.themeName]
+            if(!action.payload) return state
+            const {toneKey, keyColorSetKey, commonKey} = action.payload
+            let tone = tones[toneKey] || state.tone
+            let keyColorSet = keyColorSets[keyColorSetKey] || state.keyColorSet
+            let common = commons[commonKey] || state.common
+            return {tone, keyColorSet, common}
         default:
             return state
     }
 }
 
-const initialState = themes.dark
+const initialState: IState = {
+    tone: tones.dark,
+    keyColorSet: keyColorSets.ryg,
+    common: commons.generic
+}
 
 export default function ThemeContextProvider(props: {children: any}) {
     const [theme, dispatchTheme] = useReducer(reducer, initialState)

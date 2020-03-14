@@ -1,15 +1,17 @@
 import React from 'react'
 import './App.css'
-import TimeMeter from '../TimeMeter/TimeMeter'
+import ThemeContextProvider from '../../contexts/ThemeContext'
+import ConnectionContextProvider from '../../contexts/ConnectionContext'
 
 import {Widget, WidgetContainer} from '../WidgetComponents'
-import RobotGraphic from '../RobotGraphic/RobotGraphic'
 import Empty from '../Empty'
-import Test from '../Test'
-import ThemeContextProvider, { ThemeContext } from '../../contexts/ThemeContext'
-import ConnectStatus from '../ConnectStatus/ConnectStatus'
-import ConnectionContextProvider from '../../contexts/ConnectionContext'
+
 import ConnectionMaker from '../ConnectionMaker/ConnectionMaker'
+import ConnectStatus from '../ConnectStatus/ConnectStatus'
+import RobotGraphic from '../RobotGraphic/RobotGraphic'
+import TimeMeter from '../TimeMeter/TimeMeter'
+import ControlPanel from '../ControlPanel/ControlPanel'
+import Test from '../Test'
 
 export default function App() {
     return <div className='App'>
@@ -20,7 +22,7 @@ export default function App() {
                     <RobotGraphic/>
                 </Widget>
 
-                <Widget x={14} y={0} width={2} height={4}>
+                <Widget name='Match Time' x={14} y={0} width={2} height={4}>
                     <TimeMeter
                         variables = {{
                             time: 'timer'
@@ -33,45 +35,44 @@ export default function App() {
                     />
                 </Widget>
 
-                <Widget x={0} y={2} width={4} height={3}>
-                    <Empty temp='Camera'/>
+                <Widget name='Camera' x={0} y={2} width={4} height={3}>
+                    <Empty/>
                 </Widget>
 
-                <Widget x={0} y={5} width={4} height={3}>
-                    <Empty temp='Camera'/>
+                <Widget name='Camera' x={0} y={5} width={4} height={3}>
+                    <Empty/>
                 </Widget>
 
-                <Widget x={4} y={2} width={2} height={6}>
-                    <Empty temp='Drive Controls'/>
+                <Widget name='Drive Controls' x={4} y={2} width={2} height={6}>
+                    <Empty/>
                 </Widget>
 
-                <Widget x={6} y={0} width={4} height={2}>
-                    <Empty temp='Motor Stuff'/>
+                <Widget name='Motor Stuff' x={6} y={0} width={4} height={2}>
+                    <Empty/>
                 </Widget>
 
-                <Widget x={4} y={0} width={2} height={2}>
-                    <Empty temp='Controller Type'/>
+                <Widget name='Controller Type' x={4} y={0} width={2} height={2}>
+                    <Empty/>
                 </Widget>
 
-                <Widget x={10} y={0} width={2} height={2}>
-                    
+                <Widget name='Test' x={10} y={0} width={2} height={2}>
                     <Test/>
                 </Widget>
 
-                <Widget x={12} y={0} width={2} height={2}>
-                    <Empty temp='RGB Pallet'/>
+                <Widget name='RGB Pallet' x={12} y={0} width={2} height={2}>
+                    <Empty/>
                 </Widget>
 
-                <Widget x={12} y={2} width={2} height={2}>
-                    <Empty temp='Color Panel'/>
+                <Widget name='Control Panel' x={12} y={2} width={2} height={2}>
+                    <ControlPanel/>
                 </Widget>
 
-                <Widget x={12} y={4} width={4} height={3}>
-                    <Empty temp='Autonomous'/>
+                <Widget name='Autonomous' x={12} y={4} width={4} height={3}>
+                    <Empty />
                 </Widget>
 
-                <Widget x={12} y={7} width={4} height={1}>
-                    <Empty temp='Dashboard Settings'/>
+                <Widget name='Dashboard Settings' x={12} y={7} width={4} height={1}>
+                    <Empty/>
                 </Widget>
 
                 <Widget x={0} y={0} width={4} height={2} backColor={false}>

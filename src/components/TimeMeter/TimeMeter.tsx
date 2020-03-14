@@ -27,7 +27,7 @@ interface IStage {
 export default function TimeMeter(props: IProps) {
     let [currentTime] = useNetworkTable(props.variables.time, 0)
     let [stages, setStages] = useState<IStage[]>(),
-        [totalTime, setTotalTime] = useState()
+        [totalTime, setTotalTime] = useState(0)
     
     useEffect(() => {
         let total = 0

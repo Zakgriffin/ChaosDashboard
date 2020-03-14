@@ -1,6 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import useNetworkTable from '../../network/useNetworkTable'
 import {describeArc} from '../../functions'
+import { getTeamInfo } from '../../teamInfo/TeamInfo'
+import { ConnectionContext } from '../../contexts/ConnectionContext'
 
 interface IProps {
     x?: number
@@ -36,6 +38,8 @@ function move(x: number, y: number) {
 
 function Bumper({x, y}: {x: number, y: number}) {
     const [bumperType, setBumperType] = useState(0)
+    const {connection} = useContext(ConnectionContext)
+    const teamInfo = connection.teamInfo
     
     const colors = ['#900', '#00a', '#0006', '#0000']
     function inc() {
@@ -46,7 +50,7 @@ function Bumper({x, y}: {x: number, y: number}) {
     return <g style={move(x, y)}>
         <rect x={-15} y={-2.25} width={30} height={4.5} rx={1} fill={color} onClick={inc}/>
         {color !== '#0000' ? 
-            <text y={1.4} fontSize={4} fill='white'  pointerEvents='none' textAnchor='middle'>2458</text> : undefined
+            <text y={1.4} fontSize={4} fill='white'  pointerEvents='none' textAnchor='middle'>{teamInfo.number}</text> : undefined
         }
     </g>
 }
@@ -189,13 +193,14 @@ function Shooter({x, y, pivot}: {x: number, y: number, pivot: number}) {
         <g style={{transform: `rotate(${-pivot}deg)`}}>
             <circle r={1.5} fill='#111'/>
             <g style={move(0, 2)}>
-                <rect className='beam' x={-0.5} y={-5.5} width={1} height={5} fill='gray'/>
-                <rect className='beam' x={-4} y={-0.5} width={8} height={1} fill='gray'/>
+                {/* beams */}
+                <rect x={-0.5} y={-5.5} width={1} height={5} fill='gray'/>
+                <rect x={-4} y={-0.5} width={8} height={1} fill='gray'/>
                 <g className='wheels' fill='#800' stroke={percent > 0 ? meterColor : 'none'} strokeWidth={0.2} style={{transition:'stroke 0.3s'}}>
                     <rect x={3} y={-1.5} width={4} height={1} rx={0.4}/>
                     <rect x={3} y={0.5} width={4} height={1} rx={0.4}/>
                 </g>
-                <rect className='beam' x={4} y={-5} width={2} height={9.5} fill='gray'/>
+                <rect x={4} y={-5} width={2} height={9.5} fill='gray'/>
 
                 {lineUpWithLimelight ? <LightBeams x={5} y={0}/> : undefined}
             </g>
