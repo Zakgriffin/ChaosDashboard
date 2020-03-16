@@ -1,10 +1,10 @@
 import React, {useContext, useState, useEffect, useRef} from 'react'
 import {ThemeContext} from '../../contexts/ThemeContext'
-import {WidgetContext} from '../../contexts/WidgetContext'
+import {WidgetContext, IColor} from '../../contexts/WidgetContext'
 
 export default function LEDPallet() {
     const {theme} = useContext(ThemeContext)
-    const {LEDpalletColor, setColor} = useContext(WidgetContext)
+    const {LEDpalletColor, setLEDpalletColor, setColor} = useContext(WidgetContext)
 
     const {red, green, blue} = LEDpalletColor
     
@@ -22,7 +22,12 @@ export default function LEDPallet() {
         <ColorBar x={0} color='#26b145' value={[green, setGreen]}/>
         <ColorBar x={30} color='#1155cc' value={[blue, setBlue]}/>
 
-        <circle cy={15} r={10} fill={`rgb(${red}, ${green}, ${blue})`}/>
+        <SavedColor x={-30} current={LEDpalletColor} set={setLEDpalletColor}/>
+        <SavedColor x={-10} current={LEDpalletColor} set={setLEDpalletColor}/>
+        <SavedColor x={10} current={LEDpalletColor} set={setLEDpalletColor}/>
+        <SavedColor x={30} current={LEDpalletColor} set={setLEDpalletColor}/>
+
+        <circle cy={15} r={10} fill={colorToString(LEDpalletColor)}/>
     </svg>
 }
 
@@ -33,7 +38,6 @@ function ColorBar({x, color, value}: {x: number, color: string, value: [number, 
     const scrollScale = 0.15
 
     let height = magnitude * (maxHeight / maxMag)
-    console.log(magnitude)
 
     return <g style={{transform: `translate(${x}px, 0px)`}}>
         <rect x={-9} y={-height} width={18} height={height} fill={color}/>
@@ -46,4 +50,27 @@ function ColorBar({x, color, value}: {x: number, color: string, value: [number, 
             }}
         />
     </g>
+}
+
+function SavedColor({x, current, set}: {x: number, current: IColor, set: (color: IColor) => void}) {
+    const [color, setColor] = useState({red: 0, green: 0, blue: 0})
+
+
+    return <g style={{transform: `translate(${x}px, 0px)`}}>
+        <rect x={-7} y={30} width={14} height={8} fill={colorToString(color)}
+            onMouseUp={e => {
+                let which = e.nativeEvent.which
+                if(which === 1) {
+                    set(color)
+                } else if(which === 3) {
+                    setColor(current)
+                }
+            }}
+        />
+    </g>
+}
+
+function colorToString(color: IColor) {
+    const {red, green, blue} = color
+    return `rgb(${red}, ${green}, ${blue})`
 }

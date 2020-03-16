@@ -13,6 +13,7 @@ import RobotGraphic from '../RobotGraphic/RobotGraphic'
 import TimeMeter from '../TimeMeter/TimeMeter'
 import ControlPanel from '../ControlPanel/ControlPanel'
 import LEDPallet from '../LEDPallet/LEDPallet'
+import ControllerType from '../ControllerType/ControllerType'
 import Test from '../Test'
 
 export default function App() {
@@ -46,7 +47,7 @@ export default function App() {
                 </Widget>
 
                 <Widget name='Controller Type' x={4} y={0} width={2} height={2}>
-                    <Empty/>
+                    <ControllerType/>
                 </Widget>
 
                 <Widget name='Test' x={10} y={0} width={2} height={2}>

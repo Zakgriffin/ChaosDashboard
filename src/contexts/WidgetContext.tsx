@@ -1,11 +1,14 @@
 import React, {createContext, useState} from 'react'
 
+export interface IColor {
+    red: number
+    blue: number
+    green: number
+}
+
 interface IContext {
-    LEDpalletColor: {
-        red: number
-        green: number
-        blue: number
-    }
+    LEDpalletColor: IColor
+    setLEDpalletColor: (color: IColor) => void
     setColor: (color: string) => (value: number) => void
 }
 
@@ -22,7 +25,7 @@ export default function WidgetContextProvider(props: {children: any}) {
         return (value: number) => setLEDpalletColor({...LEDpalletColor, [color]: value})
     }
 
-    return <WidgetContext.Provider value={{LEDpalletColor, setColor}}>
+    return <WidgetContext.Provider value={{LEDpalletColor, setLEDpalletColor, setColor}}>
         {props.children}
     </WidgetContext.Provider>
 }
