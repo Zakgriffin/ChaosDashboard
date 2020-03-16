@@ -2,6 +2,7 @@ import React from 'react'
 import './App.css'
 import ThemeContextProvider from '../../contexts/ThemeContext'
 import ConnectionContextProvider from '../../contexts/ConnectionContext'
+import WidgetContextProvider from '../../contexts/WidgetContext'
 
 import {Widget, WidgetContainer} from '../WidgetComponents'
 import Empty from '../Empty'
@@ -11,12 +12,14 @@ import ConnectStatus from '../ConnectStatus/ConnectStatus'
 import RobotGraphic from '../RobotGraphic/RobotGraphic'
 import TimeMeter from '../TimeMeter/TimeMeter'
 import ControlPanel from '../ControlPanel/ControlPanel'
+import LEDPallet from '../LEDPallet/LEDPallet'
 import Test from '../Test'
 
 export default function App() {
     return <div className='App'>
         <ThemeContextProvider>
         <ConnectionContextProvider>
+        <WidgetContextProvider>
             <WidgetContainer>
                 <Widget x={6} y={2} width={6} height={6}>
                     <RobotGraphic/>
@@ -50,8 +53,8 @@ export default function App() {
                     <Test/>
                 </Widget>
 
-                <Widget name='RGB Pallet' x={12} y={0} width={2} height={2}>
-                    <Empty/>
+                <Widget name='LED Pallet' x={12} y={0} width={2} height={2}>
+                    <LEDPallet/>
                 </Widget>
 
                 <Widget name='Control Panel' x={12} y={2} width={2} height={2}>
@@ -71,6 +74,7 @@ export default function App() {
                 </Widget>
             </WidgetContainer>
             <ConnectionMaker/>
+        </WidgetContextProvider>
         </ConnectionContextProvider>
         </ThemeContextProvider>
     </div>

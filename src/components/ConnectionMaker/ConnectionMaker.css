@@ -11,6 +11,14 @@
     width: 170px;
     margin-top: 150px;
 }
+/* TEMP OH GOD THIS IS UGLY AS SHIT */
+.connection-maker-container > svg {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    width: 170px;
+    margin-top: 150px;
+}
 
 .team-number-input {
     position: relative;

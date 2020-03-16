@@ -47,7 +47,6 @@ export default function ConnectionMaker() {
 
     let teamInfo = getTeamInfo(parseInt(teamNumberField))
     let logo = teamInfo.logo
-    console.log(logo)
     
     return connected ? null : <div className='connection-maker-container' style={{
         backgroundColor: connected ? '' : '#0006'

@@ -33,6 +33,7 @@ function loadTeamInfo(teamNumber: string | number): ITeamInfo {
     }
 
     let teamLogoPath = srcTeamPath + '/logo.svg'
+    if(teamNumber === 'default') return teamInfo // TEMP
     if(fs.existsSync(teamLogoPath)) {
         import(`./${teamNumber}/logo.svg`).then(teamLogo => {
             teamInfo.logo = <img src={teamLogo.default}/>
@@ -46,3 +47,9 @@ function loadTeamInfo(teamNumber: string | number): ITeamInfo {
 export function getTeamInfo(teamNumber: number): ITeamInfo {
     return allTeamInfo[teamNumber] || defaultTeamInfo
 }
+
+// TEMP
+defaultTeamInfo.logo = <svg viewBox='0 0 100 100'>
+    <circle cx='50' cy='50' r='50' fill='#111'/>
+    <text x='50' y='50' fill='white' alignmentBaseline='central' textAnchor='middle' fontSize='75'>?</text>
+</svg>
