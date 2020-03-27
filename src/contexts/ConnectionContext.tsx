@@ -60,7 +60,7 @@ const reducer = (state: IState, action: IAction): IState => {
 }
 
 const initialState = {
-    connected: true,
+    connected: false,
     address: 'NONE',
     connecting: false,
     teamInfo: getTeamInfo(-1)

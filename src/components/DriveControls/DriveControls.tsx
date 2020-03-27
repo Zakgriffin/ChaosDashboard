@@ -1,20 +1,27 @@
 import React, {useState, useContext} from 'react'
 import {ThemeContext} from '../../contexts/ThemeContext'
 import {map} from '../../functions'
+import useNetworkTable from '../../network/useNetworkTable'
 
 export default function DriveControls() {
     const {theme} = useContext(ThemeContext)
 
-    const [power, setPower] = useState(0.5)
-    const [fastScale, setFastScale] = useState(1.5)
-    const [lerp, setLerp] = useState(0.2)
-    const [curve, setCurve] = useState(0.6)
-    const [deadzone, setDeadzone] = useState(0.2)
+    const [power, setPower] = useNetworkTable('power', 0.5)
+    const [fastScale, setFastScale] = useNetworkTable('fastScale', 1.5)
+    const [lerp, setLerp] = useNetworkTable('lerp', 0.2)
+    const [curve, setCurve] = useNetworkTable('curve', 0.6)
+    const [deadzone, setDeadzone] = useNetworkTable('deadzone', 0.2)
+
+    const [driveGoal] = useNetworkTable('driveGoal', 0)
+    const [driveSpeed] = useNetworkTable('driveSpeed', 0)
+    const [driveThrottle] = useNetworkTable('driveThrottle', 0)
 
     const gap = (i: number) => 150 + 35 * i
 
-    return <svg viewBox='-50 0 100 400'>
-        <Graph y={65} curve={curve} deadzone={deadzone} fastScale={fastScale} power={power}/>
+    return <svg viewBox='-50 0 100 400' style={{userSelect: 'none'}}>
+        <Graph y={65} curve={curve} deadzone={deadzone} fastScale={fastScale} power={power}
+            driveGoal={driveGoal} driveSpeed={driveSpeed} driveThrottle={driveThrottle}
+        />
 
         <line x1={-40} y1={122} x2={40} y2={122}
             stroke={theme.common.strokeColor}
@@ -53,7 +60,7 @@ function Slider({name, y, color, value, set, min, max}: ISlider) {
         set(newVal)
     }
 
-    return <g style={{transform: `translateY(${y}px)`, userSelect: 'none'}}>
+    return <g style={{transform: `translateY(${y}px)`}}>
         <line x1={-width} x2={width}
             stroke={color} strokeWidth={theme.common.strokeWeight} strokeLinecap='round'
         />
@@ -75,9 +82,12 @@ interface IGraphProps {
     deadzone: number
     fastScale: number
     power: number
+    driveGoal: number
+    driveSpeed: number
+    driveThrottle: number
 }
 
-function Graph({y, curve, deadzone, fastScale, power}: IGraphProps) {
+function Graph({y, curve, deadzone, fastScale, power, driveGoal, driveSpeed, driveThrottle}: IGraphProps) {
     const size = 45
     const graphMap = (x: number) => map(x, -1, 1, -size, size)
     const deadzoneMapped = graphMap(deadzone)
@@ -104,6 +114,12 @@ function Graph({y, curve, deadzone, fastScale, power}: IGraphProps) {
             {/* axes */}
             <line x1={-size} x2={size} stroke='gray' strokeDasharray={3.1}/>
             <line y1={-size} y2={size} stroke='gray'strokeDasharray={3.1}/>
+
+            {/* current drive levels */}
+            <circle cx={graphMap(driveThrottle)} cy={graphMap(driveGoal)} r={3}
+                fill='#3b58' strokeWidth={2}/>
+            <line cx={graphMap(driveThrottle)} cy={graphMap(driveSpeed)} r={3}
+                fill='#90f8' strokeWidth={2}/>
 
             {/* drive graphs */}
             <polyline points={fastGraphPoints} fill='none' stroke='rgb(221, 52, 136, 0.4)' strokeWidth={1.5}/>

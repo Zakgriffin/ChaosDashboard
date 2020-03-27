@@ -19,8 +19,8 @@ export default function ConnectionMaker() {
             if(con) {
                 dispatchConnection({type: 'CONNECTION_SUCCESS', payload: {address, teamNumber}})
             } else {
-                //dispatchConnection({type: 'CONNECTION_FAIL'})
-                dispatchConnection({type: 'CONNECTION_SUCCESS', payload: {address, teamNumber}})
+                dispatchConnection({type: 'CONNECTION_FAIL'})
+                //dispatchConnection({type: 'CONNECTION_SUCCESS', payload: {address, teamNumber}})
             }
         })
     }
