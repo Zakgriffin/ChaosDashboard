@@ -1,11 +1,6 @@
 import React from 'react'
 
 interface IProps {
-    x?: number
-    y?: number
-    width?: number
-    height?: number
-
     temp?: string
 }
 

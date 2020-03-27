@@ -12,9 +12,9 @@ import ConnectStatus from '../ConnectStatus/ConnectStatus'
 import RobotGraphic from '../RobotGraphic/RobotGraphic'
 import TimeMeter from '../TimeMeter/TimeMeter'
 import ControlPanel from '../ControlPanel/ControlPanel'
+import Autonomous from '../Autonomous/Autonomous'
 import LEDPallet from '../LEDPallet/LEDPallet'
 import ControllerType from '../ControllerType/ControllerType'
-import Test from '../Test'
 
 export default function App() {
     return <div className='App'>
@@ -50,8 +50,8 @@ export default function App() {
                     <ControllerType/>
                 </Widget>
 
-                <Widget name='Test' x={10} y={0} width={2} height={2}>
-                    <Test/>
+                <Widget x={10} y={0} width={2} height={2}>
+                    <Empty/>
                 </Widget>
 
                 <Widget name='LED Pallet' x={12} y={0} width={2} height={2}>
@@ -63,7 +63,7 @@ export default function App() {
                 </Widget>
 
                 <Widget name='Autonomous' x={12} y={4} width={4} height={3}>
-                    <Empty />
+                    <Autonomous/>
                 </Widget>
 
                 <Widget name='Dashboard Settings' x={12} y={7} width={4} height={1}>

@@ -2,20 +2,9 @@ import React, {useState, useContext} from 'react'
 import useNetworkTable from '../../network/useNetworkTable'
 import {describeArc} from '../../functions'
 import {ConnectionContext} from '../../contexts/ConnectionContext'
+import { WidgetContext } from '../../contexts/WidgetContext'
 
-interface IProps {
-    x?: number
-    y?: number
-    width?: number
-    height?: number
-}
-
-interface IPos {
-    x: number
-    y: number
-}
-
-export default function RobotGraphic(props: IProps) {
+export default function RobotGraphic(props: any) {
     const width = 40
     const height = 40
 
@@ -36,18 +25,24 @@ function move(x: number, y: number) {
 }
 
 function Bumper({x, y}: {x: number, y: number}) {
+    const {allianceColor, toggleAlliance} = useContext(WidgetContext)
     const [bumperType, setBumperType] = useState(0)
     const {connection} = useContext(ConnectionContext)
     const teamInfo = connection.teamInfo
     
-    const colors = ['#900', '#00a', '#0006', '#0000']
-    function inc() {
-        setBumperType(bumperType < colors.length - 1 ? bumperType + 1 : 0)
+    const types = ['team', '#0006', '#0000']
+    const handleClick = (e: React.MouseEvent) => {
+        let which = e.nativeEvent.which
+        if(which === 1) {
+            toggleAlliance()
+        } else if(which === 3) {
+            setBumperType(bumperType < types.length - 1 ? bumperType + 1 : 0)   
+        }
     }
-    let color = colors[bumperType]
+    let color = types[bumperType]
 
     return <g style={move(x, y)}>
-        <rect x={-15} y={-2.25} width={30} height={4.5} rx={1} fill={color} onClick={inc}/>
+        <rect x={-15} y={-2.25} width={30} height={4.5} rx={1} fill={color === 'team' ? allianceColor : color} onMouseUp={handleClick}/>
         {color !== '#0000' ? 
             <text y={1.4} fontSize={4} fill='white'  pointerEvents='none' textAnchor='middle'>{teamInfo.number}</text> : undefined
         }
