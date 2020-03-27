@@ -56,3 +56,7 @@ export function useInterval(callback: () => any, delay: number) {
 export function capFirstLetter(name: string) {
     return name.charAt(0).toUpperCase() + name.slice(1)
 }
+
+export function map(n: number, start1: number, stop1: number, start2: number, stop2: number) {
+    return ((n-start1)/(stop1-start1))*(stop2-start2)+start2
+}

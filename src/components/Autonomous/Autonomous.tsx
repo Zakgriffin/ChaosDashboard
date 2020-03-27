@@ -57,7 +57,6 @@ function RobotStartingPos({x, string, current, set, toControlPanel, setToControl
         <polyline points={`${xOffset},-72 ${xOffset},${yOffset} ${x},${yOffset}`} fill='none'
             stroke={selected && toControlPanel ? theme.common.strokeColor : 'gray'}
             onClick={() => setToControlPanel(true)}
-            style={{zIndex: -20}}
         />
         <g style={{transform: `translateX(${x}px)`}}>
             <line y2={yOffset} stroke={selected ? theme.common.strokeColor : 'gray'}

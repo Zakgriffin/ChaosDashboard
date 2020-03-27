@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect, useRef} from 'react'
+import React, {useContext, useState} from 'react'
 import {ThemeContext} from '../../contexts/ThemeContext'
 import {WidgetContext, IColor} from '../../contexts/WidgetContext'
 

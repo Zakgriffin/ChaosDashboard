@@ -257,7 +257,7 @@ function MagStage({x, y, rotations}: {x: number, y: number, rotations: number}) 
             <circle className='hub' r={hubRadius} />
             <rect x={-0.4} y={-0.4} width={0.8} height={0.8} fill='gray'/>
         </g>
-        <line x1={hubRadius} y1={s} x2={hubRadius} y2={-s} stroke='#444' strokeWidth={0.3}/>
-        <line x1={-hubRadius} y1={s} x2={-hubRadius} y2={-s} stroke='#444' strokeWidth={0.3}/>
+        <line x1={hubRadius - 0.15} y1={s} x2={hubRadius - 0.15} y2={-s} stroke='#444' strokeWidth={0.3}/>
+        <line x1={-hubRadius + 0.15} y1={s} x2={-hubRadius + 0.15} y2={-s} stroke='#444' strokeWidth={0.3}/>
     </g>
 }

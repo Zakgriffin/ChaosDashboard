@@ -13,6 +13,7 @@ import RobotGraphic from '../RobotGraphic/RobotGraphic'
 import TimeMeter from '../TimeMeter/TimeMeter'
 import ControlPanel from '../ControlPanel/ControlPanel'
 import Autonomous from '../Autonomous/Autonomous'
+import DriveControls from '../DriveControls/DriveControls'
 import LEDPallet from '../LEDPallet/LEDPallet'
 import ControllerType from '../ControllerType/ControllerType'
 
@@ -39,7 +40,7 @@ export default function App() {
                 </Widget>
 
                 <Widget name='Drive Controls' x={4} y={2} width={2} height={6}>
-                    <Empty/>
+                    <DriveControls/>
                 </Widget>
 
                 <Widget name='Motor Stuff' x={6} y={0} width={4} height={2}>
