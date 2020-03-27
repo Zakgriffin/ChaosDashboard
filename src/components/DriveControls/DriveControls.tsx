@@ -8,13 +8,13 @@ export default function DriveControls() {
     const [power, setPower] = useState(0.5)
     const [fastScale, setFastScale] = useState(1.5)
     const [lerp, setLerp] = useState(0.2)
-    const [curve, setCurve] = useState(.6)
-    const [deadzone, setDeadzone] = useState(.1)
+    const [curve, setCurve] = useState(0.6)
+    const [deadzone, setDeadzone] = useState(0.2)
 
     const gap = (i: number) => 150 + 35 * i
 
     return <svg viewBox='-50 0 100 400'>
-        <Graph y={65} curve={curve} deadzone={deadzone} fastScale={fastScale}/>
+        <Graph y={65} curve={curve} deadzone={deadzone} fastScale={fastScale} power={power}/>
 
         <line x1={-40} y1={122} x2={40} y2={122}
             stroke={theme.common.strokeColor}
@@ -23,10 +23,10 @@ export default function DriveControls() {
         />
 
         <Slider name='Power'      y={gap(0)} color='#3b5' value={power} set={setPower} min={0} max={1}/>
-        <Slider name='Fast Scale' y={gap(1)} color='#999' value={fastScale} set={setFastScale} min={1} max={2}/>
+        <Slider name='Fast Scale' y={gap(1)} color='rgb(221, 52, 136)' value={fastScale} set={setFastScale} min={1} max={2}/>
         <Slider name='Lerp'       y={gap(2)} color='#90f' value={lerp} set={setLerp} min={0} max={1}/>
-        <Slider name='Curve'      y={gap(3)} color='#15c' value={curve} set={setCurve} min={0} max={1}/>
-        <Slider name='Deadzone'   y={gap(4)} color='#b61' value={deadzone} set={setDeadzone} min={0} max={0.5}/>
+        <Slider name='Curve'      y={gap(3)} color='rgb(42, 152, 226)' value={curve} set={setCurve} min={0} max={1}/>
+        <Slider name='Deadzone'   y={gap(4)} color='rgb(246, 108, 33)' value={deadzone} set={setDeadzone} min={0} max={0.5}/>
     </svg>
 }
 
@@ -74,16 +74,17 @@ interface IGraphProps {
     curve: number
     deadzone: number
     fastScale: number
+    power: number
 }
 
-function Graph({y, curve, deadzone, fastScale}: IGraphProps) {
+function Graph({y, curve, deadzone, fastScale, power}: IGraphProps) {
     const size = 45
     const graphMap = (x: number) => map(x, -1, 1, -size, size)
     const deadzoneMapped = graphMap(deadzone)
     const funcToGraphPoints = (func: (x: number) => number) => {
         let points = ''
 
-        let n = 20
+        let n = 30
         for(let i = 0; i < n; i++) {
             let x = map(i, 0, n - 1, -1, 1)
             let y = func(x)
@@ -100,18 +101,25 @@ function Graph({y, curve, deadzone, fastScale}: IGraphProps) {
             <rect x={-size} y={-size} width={size * 2} height={size * 2} fill='white'/>
         </mask>
         <g mask='url(#graphMask)'>
+            {/* axes */}
             <line x1={-size} x2={size} stroke='gray' strokeDasharray={3.1}/>
             <line y1={-size} y2={size} stroke='gray'strokeDasharray={3.1}/>
 
-            <polyline points={fastGraphPoints} fill='none' stroke='#777' strokeWidth={1.5}/>
-            <polyline points={graphPoints} fill='none' stroke='#15c' strokeWidth={2}/>
+            {/* drive graphs */}
+            <polyline points={fastGraphPoints} fill='none' stroke='rgb(221, 52, 136, 0.4)' strokeWidth={1.5}/>
+            <polyline points={graphPoints} fill='none' stroke='rgb(51, 152, 214)' strokeWidth={2}/>
 
-            <g stroke='#b61' strokeWidth={1.5}>
+            {/* deadzone */}
+            <g stroke='rgb(246, 108, 33)' strokeWidth={1.5}>
                 <line x1={deadzoneMapped} y1={-5} x2={deadzoneMapped} y2={5}/>
                 <line x1={-deadzoneMapped} y1={-5} x2={-deadzoneMapped} y2={5}/>
                 <line x1={-deadzoneMapped} x2={deadzoneMapped}/>
             </g>
         </g>
+
+        {/* max labels */}
+        <text x={2} y={size + 2} fill='#3b5' fontSize={7} textAnchor='start'>-{power.toFixed(2)}</text>
+        <text x={-2} y={-size + 2} fill='#3b5' fontSize={7} textAnchor='end'>{power.toFixed(2)}</text>
     </g>
 }
 
@@ -126,5 +134,5 @@ function driveFunc(x: number, d: number, c: number) {
 }
 
 function fastDriveFunc(x: number, d: number, c: number, fast: number) {
-    return driveFunc(x * fast, d, c)
+    return fast * driveFunc(x, d, c)
 }
