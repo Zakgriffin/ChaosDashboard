@@ -52,3 +52,7 @@ export function useInterval(callback: () => any, delay: number) {
         }
     }, [delay])
 }
+
+export function capFirstLetter(name: string) {
+    return name.charAt(0).toUpperCase() + name.slice(1)
+}

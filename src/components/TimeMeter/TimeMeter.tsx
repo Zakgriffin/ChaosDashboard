@@ -104,6 +104,7 @@ export default function TimeMeter(props: IProps) {
             </g>
             {/* labels */}
             <text className='time-meter-stage-label'
+                style={{userSelect: 'none'}}
                 x={-5} y={labelHeight}
                 fill='white'
                 fontSize={10}
@@ -112,11 +113,11 @@ export default function TimeMeter(props: IProps) {
                 {currentStage && currentStage.label}
             </text>
             <text className='time-meter-time-label'
+                style={{transition: '0.3s', userSelect: 'none'}}
                 x={-5} y={labelHeight + 10}
                 fill={currentStage && currentStage.color}
                 fontSize={7}
                 textAnchor='end'
-                style={{transition: '0.3s'}}
             >
                 {timeString}
             </text>

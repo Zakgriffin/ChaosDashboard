@@ -56,7 +56,7 @@ export function Widget(props: IWidgetProps) {
             transform: `translate(${pad / 2}px, ${pad / 2}px)`,
             borderRadius: 6
         }}>
-            <span style={{position: 'absolute', fontSize: 12, left: 3}}>{props.name}</span>
+            <span style={{position: 'absolute', fontSize: 12, left: 3, userSelect: 'none'}}>{props.name}</span>
             {props.children}
         </div>
     </div>

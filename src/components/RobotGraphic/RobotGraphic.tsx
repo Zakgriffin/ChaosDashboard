@@ -34,9 +34,9 @@ function Bumper({x, y}: {x: number, y: number}) {
     const handleClick = (e: React.MouseEvent) => {
         let which = e.nativeEvent.which
         if(which === 1) {
-            toggleAlliance()
+            setBumperType(bumperType < types.length - 1 ? bumperType + 1 : 0)
         } else if(which === 3) {
-            setBumperType(bumperType < types.length - 1 ? bumperType + 1 : 0)   
+            toggleAlliance()
         }
     }
     let color = types[bumperType]
@@ -44,7 +44,14 @@ function Bumper({x, y}: {x: number, y: number}) {
     return <g style={move(x, y)}>
         <rect x={-15} y={-2.25} width={30} height={4.5} rx={1} fill={color === 'team' ? allianceColor : color} onMouseUp={handleClick}/>
         {color !== '#0000' ? 
-            <text y={1.4} fontSize={4} fill='white'  pointerEvents='none' textAnchor='middle'>{teamInfo.number}</text> : undefined
+            <text style={{userSelect: 'none'}}
+                y={1.4}
+                fontSize={4}
+                fill='white'
+                pointerEvents='none'
+                textAnchor='middle'>
+                {teamInfo.number}
+            </text> : undefined
         }
     </g>
 }
