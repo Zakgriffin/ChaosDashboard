@@ -9,6 +9,7 @@ import Empty from '../Empty'
 
 import ConnectionMaker from '../ConnectionMaker/ConnectionMaker'
 import ConnectStatus from '../ConnectStatus/ConnectStatus'
+import Camera from '../Camera/Camera'
 import RobotGraphic from '../RobotGraphic/RobotGraphic'
 import TimeMeter from '../TimeMeter/TimeMeter'
 import ControlPanel from '../ControlPanel/ControlPanel'
@@ -32,11 +33,11 @@ export default function App() {
                 </Widget>
 
                 <Widget name='Camera' x={0} y={2} width={4} height={3}>
-                    <Empty/>
+                    <Camera camNumber={1}/>
                 </Widget>
 
                 <Widget name='Camera' x={0} y={5} width={4} height={3}>
-                    <Empty/>
+                    <Camera camNumber={2}/>
                 </Widget>
 
                 <Widget name='Drive Controls' x={4} y={2} width={2} height={6}>
