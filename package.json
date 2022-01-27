@@ -37,7 +37,7 @@
     "react-grid-layout": "^0.18.2",
     "react-scripts": "2.1.5",
     "react-three-fiber": "^3.0.17",
-    "three": "^0.112.1",
+    "three": "^0.137.0",
     "wpilib-nt-client": "^1.7.1"
   },
   "homepage": "./",
