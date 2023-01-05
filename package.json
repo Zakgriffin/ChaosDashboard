@@ -35,7 +35,7 @@
     "react-dom": "^16.8.3",
     "react-draggable": "^4.2.0",
     "react-grid-layout": "^0.18.2",
-    "react-scripts": "2.1.5",
+    "react-scripts": "5.0.1",
     "react-three-fiber": "^3.0.17",
     "three": "^0.112.1",
     "wpilib-nt-client": "^1.7.1"
